@@ -3,18 +3,41 @@
 #include <QKeyEvent>
 #include <iostream>
 
+// Constructor for main window
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // create our model
+    controller = new GameController;
+
+    // CONNECTIONS
+    connect(controller, SIGNAL(changeMapImageRequest(QImage*)), this, SLOT(changeMapImage(QImage*)));
+
+
+    // tell the controller to load the map
+    controller->loadMapImage();
 }
 
+// destructor for main window
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
+// CUSTOM SLOTS - FROM MODEL
+// the slot used to change the Map Image displayed on the screen
+void MainWindow::changeMapImage(QImage *newImage)
+{
+    ui->MapLabel->setMaximumSize(newImage->size());
+    ui->MapLabel->setMinimumSize(newImage->size());
+    ui->MapLabel->setPixmap(QPixmap::fromImage(*newImage));
+    ui->MapLabel->show();
+}
+
+// QT GENERATED SLOTS - FROM VIEW
 // this is an event handler for Key Presses
 void MainWindow::keyPressEvent(QKeyEvent *KeyEvent)
 {

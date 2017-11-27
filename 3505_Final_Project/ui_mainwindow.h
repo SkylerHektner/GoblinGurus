@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
@@ -25,6 +26,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
+    QLabel *MapLabel;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -35,6 +37,9 @@ public:
         MainWindow->resize(400, 300);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        MapLabel = new QLabel(centralWidget);
+        MapLabel->setObjectName(QStringLiteral("MapLabel"));
+        MapLabel->setGeometry(QRect(20, 20, 351, 201));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -52,6 +57,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
+        MapLabel->setText(QString());
     } // retranslateUi
 
 };
