@@ -20,15 +20,14 @@ public:
     GameController * controller;
 
 signals:
-    moveRequested(char * movement);
+    moveRequested(std::string movement);
 
 public slots:
     void changeMapImage(QImage * newImage);
+    void changePlayerImage(QImage * image, int x, int y);
 
 private:
     Ui::MainWindow *ui;
-
-
 
     // listens for key press events and fires when one is recieved
     void keyPressEvent(QKeyEvent * KeyEvent);

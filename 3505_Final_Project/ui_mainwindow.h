@@ -27,6 +27,7 @@ class Ui_MainWindow
 public:
     QWidget *centralWidget;
     QLabel *MapLabel;
+    QLabel *PlayerLabel;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -40,6 +41,9 @@ public:
         MapLabel = new QLabel(centralWidget);
         MapLabel->setObjectName(QStringLiteral("MapLabel"));
         MapLabel->setGeometry(QRect(20, 20, 351, 201));
+        PlayerLabel = new QLabel(centralWidget);
+        PlayerLabel->setObjectName(QStringLiteral("PlayerLabel"));
+        PlayerLabel->setGeometry(QRect(160, 70, 55, 16));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -58,6 +62,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
         MapLabel->setText(QString());
+        PlayerLabel->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
     } // retranslateUi
 
 };

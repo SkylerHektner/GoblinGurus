@@ -514,44 +514,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		gamecontroller.h \
 		C:/Qt/5.9.2/mingw53_32/include/QtCore/QObject \
 		ui_mainwindow.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtCore/QVariant \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/QAction \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qaction.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qactiongroup.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/QApplication \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qapplication.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtCore/qcoreapplication.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtCore/qeventloop.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qdesktopwidget.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtGui/qguiapplication.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtGui/qinputmethod.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/QButtonGroup \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qbuttongroup.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/QHeaderView \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qheaderview.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qabstractitemview.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qframe.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtCore/qabstractitemmodel.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtCore/qitemselectionmodel.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qstyleoption.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qabstractspinbox.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtGui/qvalidator.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtCore/qregularexpression.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qslider.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qabstractslider.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qstyle.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qtabbar.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qrubberband.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/QLabel \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qlabel.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/QMenuBar \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qmenubar.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qmenu.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/QStatusBar \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/qstatusbar.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtWidgets/QWidget \
 		C:/Qt/5.9.2/mingw53_32/include/QtGui/QKeyEvent
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o mainwindow.cpp
 
@@ -602,7 +564,34 @@ debug/gamecontroller.o: gamecontroller.cpp gamecontroller.h \
 		C:/Qt/5.9.2/mingw53_32/include/QtCore/qmetatype.h \
 		C:/Qt/5.9.2/mingw53_32/include/QtCore/qvarlengtharray.h \
 		C:/Qt/5.9.2/mingw53_32/include/QtCore/qcontainerfwd.h \
-		C:/Qt/5.9.2/mingw53_32/include/QtCore/qobject_impl.h
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qobject_impl.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/QImage \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qimage.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qtguiglobal.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qtgui-config.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qcolor.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qrgb.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qrgba64.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qpaintdevice.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qwindowdefs.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qwindowdefs_win.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qrect.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qmargins.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qsize.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qpoint.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qpixelformat.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qtransform.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qmatrix.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qpolygon.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qvector.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qregion.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qdatastream.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qiodevice.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qline.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtGui/qpainterpath.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/QCoreApplication \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qcoreapplication.h \
+		C:/Qt/5.9.2/mingw53_32/include/QtCore/qeventloop.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\gamecontroller.o gamecontroller.cpp
 
 debug/moc_mainwindow.o: debug/moc_mainwindow.cpp 

@@ -15,25 +15,32 @@ public:
     explicit GameController(QObject * parent = 0);
 
     void loadMapImage();
+    void loadPlayerImage();
 
 signals:
     void changeMapImageRequest(QImage * image);
+    void changePlayerImageRequest(QImage * image, int x, int y);
 
 public slots:
+    void moveRequested(std::string movement);
 
 private:
     // variables to keep track of the current game state
     int PlayerPosX = 0;
-    int PlayerPoxY = 0;
+    int PlayerPosY = 0;
 
     // the QImage we use to store the map
     QImage * mapImage;
-    // the size of the grid in pixels
-    int gridSize = 10;
+    // the QImage we use to store the player sprite
+    QImage * playerSprite;
+    // the size of the grid in pixels and it's total number of grid units in x and z
+    int gridRatio = 40;
+    int maxGridSizeY = 16;
+    int maxGridSizeX = 16;
+    // a vector of std::pairs of collision points for the player
+    std::vector<std::pair<int, int>> * collisionPoints = new std::vector<std::pair<int, int>>();
 
-
-
-    // the method called to move the player
+    // the method called to emit a signal for the view to move the player
     movePlayer(std::string movement);
 };
 
