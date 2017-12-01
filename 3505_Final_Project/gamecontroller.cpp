@@ -3,6 +3,7 @@
 #include <QImage>
 #include <QCoreApplication>
 #include <iostream>
+#include "goblin.h"
 
 // destructor for the Game Controller Class
 GameController::~GameController()
@@ -26,6 +27,9 @@ GameController::GameController(QObject * parent) : QObject(parent)
 
     // fill the collision point array with points
     collisionPoints->push_back(std::pair<int, int>(1, 1));
+
+    // add some goblins to the goblinVector
+    goblinVector->push_back(new goblin(4, 4, "What is the meaning of life!?", 42));
 }
 
 // private method to load in a map Image. Will likely take in a QImage later
@@ -53,6 +57,17 @@ void GameController::loadPlayerImage()
     else if (lastMoveDirection == 'r')
     {
         emit changePlayerImageRequest(playerSprite_r, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+    }
+}
+
+void GameController::loadGoblinImages()
+{
+    for(int i = 0; i < goblinVector->size(); i++)
+    {
+        emit changeGoblinImageRequest(goblinVector->at(i)->goblinSprite,
+                                      goblinVector->at(i)->posX * gridRatio,
+                                      goblinVector->at(i)->posY * gridRatio,
+                                      i);
     }
 }
 

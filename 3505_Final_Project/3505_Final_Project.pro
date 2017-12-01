@@ -26,11 +26,13 @@ INCLUDEPATH += "$$PWD/../../Box2D-master/Box2D"
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    gamecontroller.cpp
+    gamecontroller.cpp \
+    goblin.cpp
 
 HEADERS += \
         mainwindow.h \
-    gamecontroller.h
+    gamecontroller.h \
+    goblin.h
 
 FORMS += \
         mainwindow.ui

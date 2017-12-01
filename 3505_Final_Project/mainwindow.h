@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "gamecontroller.h"
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -25,9 +26,14 @@ signals:
 public slots:
     void changeMapImage(QImage * newImage);
     void changePlayerImage(QImage * image, int x, int y);
+    void changeGoblinImage(QImage * image, int x, int y, int i);
+    void killGoblin(int i);
 
 private:
     Ui::MainWindow *ui;
+
+    // A vector of Labels used to render the goblins in the scene
+    std::vector<QLabel*> * goblinLabelVector = new std::vector<QLabel*>();
 
     // listens for key press events and fires when one is recieved
     void keyPressEvent(QKeyEvent * KeyEvent);

@@ -1,6 +1,7 @@
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 #include <QObject>
+#include "goblin.h"
 
 /*
  * This class is the primary model object for the game. It ultimately is responsible for interfacing with the view.
@@ -16,10 +17,15 @@ public:
 
     void loadMapImage();
     void loadPlayerImage();
+    void loadGoblinImages();
 
 signals:
     void changeMapImageRequest(QImage * image);
     void changePlayerImageRequest(QImage * image, int x, int y);
+
+    // in the two below methods, i refers to the index of the goblin we want to act on
+    void changeGoblinImageRequest(QImage * image, int x, int y, int i);
+    void killGoblin(int i);
 
 public slots:
     void moveRequested(std::string movement);
@@ -43,6 +49,9 @@ private:
     int maxGridSizeX = 16;
     // a vector of std::pairs of collision points for the player
     std::vector<std::pair<int, int>> * collisionPoints = new std::vector<std::pair<int, int>>();
+
+    // a vector of the goblins on the map
+    std::vector<goblin*> * goblinVector = new std::vector<goblin*>();
 
     // the method called to emit a signal for the view to move the player
     movePlayer(std::string movement);

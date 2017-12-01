@@ -28,6 +28,11 @@ public:
     QWidget *centralWidget;
     QLabel *MapLabel;
     QLabel *PlayerLabel;
+    QLabel *GoblinLabel1;
+    QLabel *GoblinLabel2;
+    QLabel *GoblinLabel3;
+    QLabel *GoblinLabel4;
+    QLabel *GoblinLabel5;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -44,6 +49,21 @@ public:
         PlayerLabel = new QLabel(centralWidget);
         PlayerLabel->setObjectName(QStringLiteral("PlayerLabel"));
         PlayerLabel->setGeometry(QRect(160, 70, 55, 16));
+        GoblinLabel1 = new QLabel(centralWidget);
+        GoblinLabel1->setObjectName(QStringLiteral("GoblinLabel1"));
+        GoblinLabel1->setGeometry(QRect(10, 230, 55, 16));
+        GoblinLabel2 = new QLabel(centralWidget);
+        GoblinLabel2->setObjectName(QStringLiteral("GoblinLabel2"));
+        GoblinLabel2->setGeometry(QRect(70, 230, 55, 16));
+        GoblinLabel3 = new QLabel(centralWidget);
+        GoblinLabel3->setObjectName(QStringLiteral("GoblinLabel3"));
+        GoblinLabel3->setGeometry(QRect(130, 230, 55, 16));
+        GoblinLabel4 = new QLabel(centralWidget);
+        GoblinLabel4->setObjectName(QStringLiteral("GoblinLabel4"));
+        GoblinLabel4->setGeometry(QRect(190, 230, 55, 16));
+        GoblinLabel5 = new QLabel(centralWidget);
+        GoblinLabel5->setObjectName(QStringLiteral("GoblinLabel5"));
+        GoblinLabel5->setGeometry(QRect(250, 230, 55, 16));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -63,6 +83,11 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
         MapLabel->setText(QString());
         PlayerLabel->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        GoblinLabel1->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        GoblinLabel2->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        GoblinLabel3->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        GoblinLabel4->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        GoblinLabel5->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
     } // retranslateUi
 
 };
