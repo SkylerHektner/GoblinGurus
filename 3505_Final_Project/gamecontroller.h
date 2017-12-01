@@ -31,8 +31,12 @@ private:
 
     // the QImage we use to store the map
     QImage * mapImage;
-    // the QImage we use to store the player sprite
-    QImage * playerSprite;
+    // the QImages we use to store the player sprites (organized front, back, left, right for the direction they face)
+    QImage * playerSprite_f;
+    QImage * playerSprite_b;
+    QImage * playerSprite_l;
+    QImage * playerSprite_r;
+    char lastMoveDirection = 'f'; // tells us what playerImage to send to the view. Assigned during movement
     // the size of the grid in pixels and it's total number of grid units in x and z
     int gridRatio = 40;
     int maxGridSizeY = 16;

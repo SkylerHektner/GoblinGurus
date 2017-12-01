@@ -13,9 +13,16 @@ GameController::~GameController()
 // constructor for the Game Controller Class
 GameController::GameController(QObject * parent) : QObject(parent)
 {
-    // make the player sprite a black square for testing
-    playerSprite = new QImage(40, 40, QImage::Format_ARGB32);
-    playerSprite->fill(Qt::GlobalColor::black);
+    // Load the player sprites
+    float ratio = 2;
+    playerSprite_f = new QImage("../Assets/spr_main_f.png");
+    playerSprite_f->setDevicePixelRatio(ratio);
+    playerSprite_b = new QImage("../Assets/spr_main_b.png");
+    playerSprite_b->setDevicePixelRatio(ratio);
+    playerSprite_l = new QImage("../Assets/spr_main_l.png");
+    playerSprite_l->setDevicePixelRatio(ratio);
+    playerSprite_r = new QImage("../Assets/spr_main_r.png");
+    playerSprite_r->setDevicePixelRatio(ratio);
 
     // fill the collision point array with points
     collisionPoints->push_back(std::pair<int, int>(1, 1));
@@ -31,7 +38,22 @@ void GameController::loadMapImage()
 
 void GameController::loadPlayerImage()
 {
-    emit changePlayerImageRequest(playerSprite, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+    if (lastMoveDirection == 'f')
+    {
+        emit changePlayerImageRequest(playerSprite_f, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+    }
+    else if (lastMoveDirection == 'b')
+    {
+        emit changePlayerImageRequest(playerSprite_b, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+    }
+    else if (lastMoveDirection == 'l')
+    {
+        emit changePlayerImageRequest(playerSprite_l, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+    }
+    else if (lastMoveDirection == 'r')
+    {
+        emit changePlayerImageRequest(playerSprite_r, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+    }
 }
 
 // public slot for moving the character
@@ -46,18 +68,22 @@ void GameController::moveRequested(std::string movement)
     if (movement == "UP" && PlayerPosY > 0)
     {
         PlayerPosY--;
+        lastMoveDirection = 'b';
     }
     else if (movement == "DOWN" && PlayerPosY < maxGridSizeY)
     {
         PlayerPosY++;
+        lastMoveDirection = 'f';
     }
     else if (movement == "LEFT" && PlayerPosX > 0)
     {
         PlayerPosX--;
+        lastMoveDirection = 'l';
     }
     else if (movement == "RIGHT" && PlayerPosX < maxGridSizeX)
     {
         PlayerPosX++;
+        lastMoveDirection = 'r';
     }
 
     // check for collision and revert movement if necessary
