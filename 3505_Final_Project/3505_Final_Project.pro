@@ -35,7 +35,7 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-win32: LIBS += -L"$$PWD/../SFML-2.4.2/lib" -lsfml-main-d -lsfml-audio-d -lsfml-window-d -lsfml-graphics-d -lsfml-system-d -lsfml-network-d
+win32: LIBS += -L"$$PWD/../../SFML-2.4.2/lib" -lsfml-main-d -lsfml-audio-d -lsfml-window-d -lsfml-graphics-d -lsfml-system-d -lsfml-network-d
 
-INCLUDEPATH += "$$PWD/../SFML-2.4.2/include"
-DEPENDPATH += "$$PWD/../SFML-2.4.2/include"
+INCLUDEPATH += "$$PWD/../../SFML-2.4.2/include"
+DEPENDPATH += "$$PWD/../../SFML-2.4.2/include"
