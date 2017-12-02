@@ -15,7 +15,7 @@ GameController::~GameController()
 GameController::GameController(QObject * parent) : QObject(parent)
 {
     // Load the player sprites
-    float ratio = 2;
+    float ratio = 1;
     playerSprite_f = new QImage("../Assets/spr_main_f.png");
     playerSprite_f->setDevicePixelRatio(ratio);
     playerSprite_b = new QImage("../Assets/spr_main_b.png");
@@ -35,7 +35,7 @@ GameController::GameController(QObject * parent) : QObject(parent)
 // private method to load in a map Image. Will likely take in a QImage later
 void GameController::loadMapImage()
 {
-    QImage testImage("testMap.jpg");
+    QImage testImage("../Assets/level_template.jpg");
 
     emit changeMapImageRequest(&testImage);
 }
@@ -44,19 +44,19 @@ void GameController::loadPlayerImage()
 {
     if (lastMoveDirection == 'f')
     {
-        emit changePlayerImageRequest(playerSprite_f, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+        emit changePlayerImageRequest(playerSprite_f, PlayerPosX * gridRatio + gridOffsetX, PlayerPosY * gridRatio + gridOffsetY);
     }
     else if (lastMoveDirection == 'b')
     {
-        emit changePlayerImageRequest(playerSprite_b, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+        emit changePlayerImageRequest(playerSprite_b, PlayerPosX * gridRatio + gridOffsetX, PlayerPosY * gridRatio + gridOffsetY);
     }
     else if (lastMoveDirection == 'l')
     {
-        emit changePlayerImageRequest(playerSprite_l, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+        emit changePlayerImageRequest(playerSprite_l, PlayerPosX * gridRatio + gridOffsetX, PlayerPosY * gridRatio + gridOffsetY);
     }
     else if (lastMoveDirection == 'r')
     {
-        emit changePlayerImageRequest(playerSprite_r, PlayerPosX * gridRatio, PlayerPosY * gridRatio);
+        emit changePlayerImageRequest(playerSprite_r, PlayerPosX * gridRatio + gridOffsetX, PlayerPosY * gridRatio + gridOffsetY);
     }
 }
 
@@ -65,8 +65,8 @@ void GameController::loadGoblinImages()
     for(int i = 0; i < goblinVector->size(); i++)
     {
         emit changeGoblinImageRequest(goblinVector->at(i)->goblinSprite,
-                                      goblinVector->at(i)->posX * gridRatio,
-                                      goblinVector->at(i)->posY * gridRatio,
+                                      goblinVector->at(i)->posX * gridRatio + gridOffsetX,
+                                      goblinVector->at(i)->posY * gridRatio + gridOffsetY,
                                       i);
     }
 }

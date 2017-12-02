@@ -9,7 +9,7 @@ goblin::goblin(int x, int y, std::string question, int answer)
     question = question;
     answer = answer;
     goblinSprite = new QImage("../Assets/spr_goblin_sword.png");
-    goblinSprite ->setDevicePixelRatio(2);
+    goblinSprite ->setDevicePixelRatio(1);
 }
 
 goblin::~goblin()

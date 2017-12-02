@@ -44,9 +44,11 @@ private:
     QImage * playerSprite_r;
     char lastMoveDirection = 'f'; // tells us what playerImage to send to the view. Assigned during movement
     // the size of the grid in pixels and it's total number of grid units in x and z
-    int gridRatio = 40;
-    int maxGridSizeY = 16;
-    int maxGridSizeX = 16;
+    int gridRatio = 80;
+    int maxGridSizeY = 9;
+    int maxGridSizeX = 15;
+    int gridOffsetX = 40;
+    int gridOffsetY = 40;
     // a vector of std::pairs of collision points for the player
     std::vector<std::pair<int, int>> * collisionPoints = new std::vector<std::pair<int, int>>();
 

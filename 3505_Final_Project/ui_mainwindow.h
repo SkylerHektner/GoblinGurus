@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.2
+** Created by: Qt User Interface Compiler version 5.9.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -67,7 +67,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 26));
+        menuBar->setGeometry(QRect(0, 0, 400, 20));
         MainWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -82,12 +82,12 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
         MapLabel->setText(QString());
-        PlayerLabel->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
-        GoblinLabel1->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
-        GoblinLabel2->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
-        GoblinLabel3->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
-        GoblinLabel4->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
-        GoblinLabel5->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        PlayerLabel->setText(QString());
+        GoblinLabel1->setText(QString());
+        GoblinLabel2->setText(QString());
+        GoblinLabel3->setText(QString());
+        GoblinLabel4->setText(QString());
+        GoblinLabel5->setText(QString());
     } // retranslateUi
 
 };
