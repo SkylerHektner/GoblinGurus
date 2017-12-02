@@ -10,6 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // parse and archive questions from questions.txt
+    qManager = new QuestionManager;
+
     // create our model
     controller = new GameController;
 

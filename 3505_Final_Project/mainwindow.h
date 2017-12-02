@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "gamecontroller.h"
+#include "questionmanager.h"
 #include <QLabel>
 
 namespace Ui {
@@ -16,6 +17,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    QuestionManager * qManager;
 
     // container for our GameController Model
     GameController * controller;
