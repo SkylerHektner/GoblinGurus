@@ -51,8 +51,8 @@ private:
     int gridRatio = 80;
     int maxGridSizeY = 9;
     int maxGridSizeX = 15;
-    int gridOffsetX = 40;
-    int gridOffsetY = 40;
+    int gridOffsetX = 40; // used to account for map borders or other
+    int gridOffsetY = 40; // used to account for map borders or other
     // a vector of std::pairs of collision points for the player
     std::vector<std::pair<int, int>> * collisionPoints = new std::vector<std::pair<int, int>>();
 
