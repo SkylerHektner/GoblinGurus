@@ -105,6 +105,58 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="ParchmentLabel">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>10</y>
+      <width>55</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ParchmentTextLabel">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>40</y>
+      <width>55</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="AnswerLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>70</y>
+      <width>113</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Answer...</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="SubmitAnswerButton">
+    <property name="geometry">
+     <rect>
+      <x>272</x>
+      <y>100</y>
+      <width>121</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Submit Answer</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -112,7 +164,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>20</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

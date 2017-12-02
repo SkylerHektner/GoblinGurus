@@ -22,12 +22,17 @@ public:
 
 signals:
     moveRequested(std::string movement);
+    answerSubmitted(int answer);
 
 public slots:
     void changeMapImage(QImage * newImage);
     void changePlayerImage(QImage * image, int x, int y);
     void changeGoblinImage(QImage * image, int x, int y, int i);
     void killGoblin(int i);
+    void showParchment(QString textToDisplay, bool takeAnswer, QImage * parchmentImage);
+
+private slots:
+    void on_SubmitAnswerButton_clicked();
 
 private:
     Ui::MainWindow *ui;

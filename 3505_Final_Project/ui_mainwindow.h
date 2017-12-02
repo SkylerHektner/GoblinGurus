@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 5.9.1
+** Created by: Qt User Interface Compiler version 5.9.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -15,8 +15,10 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
@@ -33,6 +35,10 @@ public:
     QLabel *GoblinLabel3;
     QLabel *GoblinLabel4;
     QLabel *GoblinLabel5;
+    QLabel *ParchmentLabel;
+    QLabel *ParchmentTextLabel;
+    QLineEdit *AnswerLineEdit;
+    QPushButton *SubmitAnswerButton;
     QMenuBar *menuBar;
     QStatusBar *statusBar;
 
@@ -64,10 +70,22 @@ public:
         GoblinLabel5 = new QLabel(centralWidget);
         GoblinLabel5->setObjectName(QStringLiteral("GoblinLabel5"));
         GoblinLabel5->setGeometry(QRect(250, 230, 55, 16));
+        ParchmentLabel = new QLabel(centralWidget);
+        ParchmentLabel->setObjectName(QStringLiteral("ParchmentLabel"));
+        ParchmentLabel->setGeometry(QRect(330, 10, 55, 16));
+        ParchmentTextLabel = new QLabel(centralWidget);
+        ParchmentTextLabel->setObjectName(QStringLiteral("ParchmentTextLabel"));
+        ParchmentTextLabel->setGeometry(QRect(330, 40, 55, 16));
+        AnswerLineEdit = new QLineEdit(centralWidget);
+        AnswerLineEdit->setObjectName(QStringLiteral("AnswerLineEdit"));
+        AnswerLineEdit->setGeometry(QRect(280, 70, 113, 22));
+        SubmitAnswerButton = new QPushButton(centralWidget);
+        SubmitAnswerButton->setObjectName(QStringLiteral("SubmitAnswerButton"));
+        SubmitAnswerButton->setGeometry(QRect(272, 100, 121, 28));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 20));
+        menuBar->setGeometry(QRect(0, 0, 400, 26));
         MainWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -88,6 +106,10 @@ public:
         GoblinLabel3->setText(QString());
         GoblinLabel4->setText(QString());
         GoblinLabel5->setText(QString());
+        ParchmentLabel->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        ParchmentTextLabel->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
+        AnswerLineEdit->setPlaceholderText(QApplication::translate("MainWindow", "Answer...", Q_NULLPTR));
+        SubmitAnswerButton->setText(QApplication::translate("MainWindow", "Submit Answer", Q_NULLPTR));
     } // retranslateUi
 
 };

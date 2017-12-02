@@ -20,6 +20,15 @@ MainWindow::MainWindow(QWidget *parent) :
     goblinLabelVector->push_back(ui->GoblinLabel4);
     goblinLabelVector->push_back(ui->GoblinLabel5);
 
+    // ensure answer line edit only accepts ints and is hidden
+    ui->AnswerLineEdit->setValidator(new QIntValidator(-1000, 1000, this));
+    ui->AnswerLineEdit->hide();
+    // ensure parchment text label is hidden and parchment render label are hidden
+    ui->ParchmentLabel->hide();
+    ui->ParchmentTextLabel->hide();
+    // ensure answer button is hidden
+    ui->SubmitAnswerButton->hide();
+
     // CONNECTIONS
     connect(controller, SIGNAL(changeMapImageRequest(QImage*)), this, SLOT(changeMapImage(QImage*)));
     connect(controller, SIGNAL(changePlayerImageRequest(QImage*,int,int)), this, SLOT(changePlayerImage(QImage*,int,int)));
@@ -78,6 +87,47 @@ void MainWindow::killGoblin(int i)
     //goblinLabelVector->pop_back();
 }
 
+// the slot used by the model to cause the parchment page to display
+// takeAnswer determines if we are showing the player a question (true) or a hint (false)
+void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * parchmentImage)
+{
+    // calculate center of screen for later use
+    int centerX = ui->centralWidget->size().width()/2;
+    int centerY = ui->centralWidget->size().height()/2;
+
+    // if take answer, show the answer line edit, else we are just showing the player a hint
+    if (takeAnswer)
+    {
+        ui->SubmitAnswerButton->setText(QString("Submit Answer"));
+
+        ui->AnswerLineEdit->move(centerX - ui->AnswerLineEdit->size().width()/2, centerY*1.5);
+        ui->AnswerLineEdit->show();
+    }
+
+    else
+    {
+        ui->SubmitAnswerButton->setText(QString("Ok"));
+    }
+
+    // set the parchment image and format correctly
+    ui->ParchmentLabel->setMaximumSize(parchmentImage->size());
+    ui->ParchmentLabel->setMinimumSize(parchmentImage->size());
+    ui->ParchmentLabel->setPixmap(QPixmap::fromImage(*parchmentImage));
+
+    // set the parchment text we want to display
+    ui->ParchmentTextLabel->setText(textToDisplay);
+
+    // move all the widgets to the center of the screen formatted correctly
+    ui->ParchmentLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY - ui->ParchmentLabel->size().height()/2);
+    ui->ParchmentTextLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY*.7);
+    ui->SubmitAnswerButton->move(centerX - ui->ParchmentLabel->size().width()/2, centerY * 1.8);
+
+    // show all widgets
+    ui->ParchmentLabel->show();
+    ui->ParchmentTextLabel->show();
+    ui->SubmitAnswerButton->show();
+}
+
 // QT GENERATED SLOTS - FROM VIEW
 // this is an event handler for Key Presses
 void MainWindow::keyPressEvent(QKeyEvent *KeyEvent)
@@ -112,4 +162,19 @@ void MainWindow::keyPressEvent(QKeyEvent *KeyEvent)
     {
         emit moveRequested(std::string("LEFT"));
     }
+}
+
+// event handler for when the submit answer button is clicked
+void MainWindow::on_SubmitAnswerButton_clicked()
+{
+    // hide all the UI elements for the Question
+    ui->SubmitAnswerButton->hide();
+    ui->ParchmentLabel->hide();
+    ui->ParchmentTextLabel->hide();
+    ui->AnswerLineEdit->hide();
+
+    // get the answer out of the Answer Line Edit and send it to the model and clear it
+    QString answer = ui->AnswerLineEdit->text();
+    emit answerSubmitted(answer.toInt());
+    ui->AnswerLineEdit->clear();
 }
