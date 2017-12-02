@@ -91,8 +91,8 @@ static const uint qt_meta_data_MainWindow[] = {
       21,    0,   89,    2, 0x08 /* Private */,
 
  // signals: parameters
-    QMetaType::Int, 0x80000000 | 3,    4,
-    QMetaType::Int, QMetaType::Int,    6,
+    QMetaType::Void, 0x80000000 | 3,    4,
+    QMetaType::Void, QMetaType::Int,    6,
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 8,    9,
@@ -111,10 +111,8 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         MainWindow *_t = static_cast<MainWindow *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: { int _r = _t->moveRequested((*reinterpret_cast< std::string(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
-        case 1: { int _r = _t->answerSubmitted((*reinterpret_cast< int(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
+        case 0: _t->moveRequested((*reinterpret_cast< std::string(*)>(_a[1]))); break;
+        case 1: _t->answerSubmitted((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->changeMapImage((*reinterpret_cast< QImage*(*)>(_a[1]))); break;
         case 3: _t->changePlayerImage((*reinterpret_cast< QImage*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         case 4: _t->changeGoblinImage((*reinterpret_cast< QImage*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
@@ -127,14 +125,14 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         int *result = reinterpret_cast<int *>(_a[0]);
         void **func = reinterpret_cast<void **>(_a[1]);
         {
-            typedef int (MainWindow::*_t)(std::string );
+            typedef void (MainWindow::*_t)(std::string );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::moveRequested)) {
                 *result = 0;
                 return;
             }
         }
         {
-            typedef int (MainWindow::*_t)(int );
+            typedef void (MainWindow::*_t)(int );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MainWindow::answerSubmitted)) {
                 *result = 1;
                 return;
@@ -180,21 +178,17 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-int MainWindow::moveRequested(std::string _t1)
+void MainWindow::moveRequested(std::string _t1)
 {
-    int _t0{};
-    void *_a[] = { const_cast<void*>(reinterpret_cast<const void*>(&_t0)), const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
-    return _t0;
 }
 
 // SIGNAL 1
-int MainWindow::answerSubmitted(int _t1)
+void MainWindow::answerSubmitted(int _t1)
 {
-    int _t0{};
-    void *_a[] = { const_cast<void*>(reinterpret_cast<const void*>(&_t0)), const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
-    return _t0;
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

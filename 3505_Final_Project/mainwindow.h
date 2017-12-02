@@ -21,8 +21,8 @@ public:
     GameController * controller;
 
 signals:
-    moveRequested(std::string movement);
-    answerSubmitted(int answer);
+    void moveRequested(std::string movement);
+    void answerSubmitted(int answer);
 
 public slots:
     void changeMapImage(QImage * newImage);

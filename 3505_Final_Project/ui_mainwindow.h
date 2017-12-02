@@ -76,6 +76,8 @@ public:
         ParchmentTextLabel = new QLabel(centralWidget);
         ParchmentTextLabel->setObjectName(QStringLiteral("ParchmentTextLabel"));
         ParchmentTextLabel->setGeometry(QRect(330, 40, 55, 16));
+        ParchmentTextLabel->setAlignment(Qt::AlignHCenter|Qt::AlignTop);
+        ParchmentTextLabel->setWordWrap(true);
         AnswerLineEdit = new QLineEdit(centralWidget);
         AnswerLineEdit->setObjectName(QStringLiteral("AnswerLineEdit"));
         AnswerLineEdit->setGeometry(QRect(280, 70, 113, 22));

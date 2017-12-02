@@ -27,6 +27,8 @@ signals:
     void changeGoblinImageRequest(QImage * image, int x, int y, int i);
     void killGoblin(int i);
 
+    void showParchment(QString QuestionText, bool takeAnswer, QImage * image);
+
 public slots:
     void moveRequested(std::string movement);
 
@@ -58,7 +60,7 @@ private:
     std::vector<goblin*> * goblinVector = new std::vector<goblin*>();
 
     // the method called to emit a signal for the view to move the player
-    movePlayer(std::string movement);
+    void movePlayer(std::string movement);
 };
 
 

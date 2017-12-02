@@ -31,7 +31,8 @@ GameController::GameController(QObject * parent) : QObject(parent)
     // add some goblins to the goblinVector
     goblinVector->push_back(new goblin(4, 4, "What is the meaning of life!?", 42));
 
-
+    // load in the parchmentImage
+    parchmentImage = new QImage("../Assets/parchment.png");
 }
 
 // private method to load in a map Image. Will likely take in a QImage later
@@ -110,6 +111,14 @@ void GameController::moveRequested(std::string movement)
         {
             PlayerPosX = oldPosX;
             PlayerPosY = oldPosY;
+        }
+    }
+
+    for (int i = 0; i < goblinVector->size();i++)
+    {
+        if (goblinVector->at(i)->posX == PlayerPosX && goblinVector->at(i)->posY == PlayerPosY)
+        {
+            emit showParchment(goblinVector->at(i)->question, true, parchmentImage);
         }
     }
 

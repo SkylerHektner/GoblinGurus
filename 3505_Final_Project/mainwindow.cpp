@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(moveRequested(std::string)), controller, SLOT(moveRequested(std::string)));
     connect(controller, SIGNAL(changeGoblinImageRequest(QImage*,int,int,int)), this, SLOT(changeGoblinImage(QImage*,int,int,int)));
     connect(controller, SIGNAL(killGoblin(int)), this, SLOT(killGoblin(int)));
+    connect(controller, SIGNAL(showParchment(QString,bool,QImage*)), this, SLOT(showParchment(QString,bool,QImage*)));
 
 
     // tell the controller to load the map
@@ -114,18 +115,22 @@ void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * 
     ui->ParchmentLabel->setMinimumSize(parchmentImage->size());
     ui->ParchmentLabel->setPixmap(QPixmap::fromImage(*parchmentImage));
 
-    // set the parchment text we want to display
+    // set the parchment text we want to display and set its size
     ui->ParchmentTextLabel->setText(textToDisplay);
+    ui->ParchmentTextLabel->setMinimumSize(parchmentImage->size()/2);
 
     // move all the widgets to the center of the screen formatted correctly
     ui->ParchmentLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY - ui->ParchmentLabel->size().height()/2);
-    ui->ParchmentTextLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY*.7);
-    ui->SubmitAnswerButton->move(centerX - ui->ParchmentLabel->size().width()/2, centerY * 1.8);
+    ui->ParchmentTextLabel->move(centerX - ui->ParchmentTextLabel->size().width()/2, centerY*.7);
+    ui->SubmitAnswerButton->move(centerX - ui->SubmitAnswerButton->size().width()/2, centerY * 1.6);
 
     // show all widgets
     ui->ParchmentLabel->show();
     ui->ParchmentTextLabel->show();
     ui->SubmitAnswerButton->show();
+
+    // set focus on the submit answer button to make sure the player cannot move
+    ui->SubmitAnswerButton->setFocus();
 }
 
 // QT GENERATED SLOTS - FROM VIEW
@@ -177,4 +182,7 @@ void MainWindow::on_SubmitAnswerButton_clicked()
     QString answer = ui->AnswerLineEdit->text();
     emit answerSubmitted(answer.toInt());
     ui->AnswerLineEdit->clear();
+
+    // give focus back to central widget
+    ui->centralWidget->setFocus();
 }
