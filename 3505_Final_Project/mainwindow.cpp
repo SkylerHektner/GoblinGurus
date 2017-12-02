@@ -124,8 +124,8 @@ void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * 
 
     // move all the widgets to the center of the screen formatted correctly
     ui->ParchmentLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY - ui->ParchmentLabel->size().height()/2);
-    ui->ParchmentTextLabel->move(centerX - ui->ParchmentTextLabel->size().width()/2, centerY*.7);
-    ui->SubmitAnswerButton->move(centerX - ui->SubmitAnswerButton->size().width()/2, centerY * 1.6);
+    ui->ParchmentTextLabel->move(centerX - ui->ParchmentTextLabel->size().width()/2, centerY*.6);
+    ui->SubmitAnswerButton->move(centerX - ui->SubmitAnswerButton->size().width()/2, centerY * 1.4);
 
     // show all widgets
     ui->ParchmentLabel->show();
