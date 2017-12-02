@@ -30,6 +30,8 @@ GameController::GameController(QObject * parent) : QObject(parent)
 
     // add some goblins to the goblinVector
     goblinVector->push_back(new goblin(4, 4, "What is the meaning of life!?", 42));
+
+
 }
 
 // private method to load in a map Image. Will likely take in a QImage later

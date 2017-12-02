@@ -37,6 +37,8 @@ private:
 
     // the QImage we use to store the map
     QImage * mapImage;
+    // the QImage we use to store the parchment paper used in questions and hints
+    QImage * parchmentImage;
     // the QImages we use to store the player sprites (organized front, back, left, right for the direction they face)
     QImage * playerSprite_f;
     QImage * playerSprite_b;
