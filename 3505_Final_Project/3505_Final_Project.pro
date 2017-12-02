@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     gamecontroller.cpp \
-    goblin.cpp
+    goblin.cpp \
+    pathfinder.cpp
 
 HEADERS += \
         mainwindow.h \
     gamecontroller.h \
-    goblin.h
+    goblin.h \
+    pathfinder.h
 
 FORMS += \
         mainwindow.ui
