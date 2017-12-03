@@ -120,7 +120,8 @@ void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * 
 
     // set the parchment text we want to display and set its size
     ui->ParchmentTextLabel->setText(textToDisplay);
-    ui->ParchmentTextLabel->setMinimumSize(parchmentImage->size()/2);
+    ui->ParchmentTextLabel->setMinimumSize(parchmentImage->size()/4);
+    ui->ParchmentTextLabel->setMaximumSize(parchmentImage->size()/4);
 
     // move all the widgets to the center of the screen formatted correctly
     ui->ParchmentLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY - ui->ParchmentLabel->size().height()/2 + 20);

@@ -224,7 +224,7 @@ void GameController::generateGoblins(int level)
 {
     if (level == 1)
     {
-        Question q = questionManager->GetQuestion(1);
-        //goblinVector->push_back(new goblin(2, 2, q.text, q.answer));
+        Question q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(2, 2, q.text, q.answer));
     }
 }
