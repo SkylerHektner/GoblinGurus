@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(controller, SIGNAL(changeGoblinImageRequest(QImage*,int,int,int)), this, SLOT(changeGoblinImage(QImage*,int,int,int)));
     connect(controller, SIGNAL(killGoblin(int)), this, SLOT(killGoblin(int)));
     connect(controller, SIGNAL(showParchment(QString,bool,QImage*)), this, SLOT(showParchment(QString,bool,QImage*)));
+    connect(this, SIGNAL(answerSubmitted(int)), controller, SLOT(answerReceived(int)));
 
 
     // tell the controller to load the map
@@ -88,7 +89,8 @@ void MainWindow::changeGoblinImage(QImage *image, int x, int y, int i)
 // the slot that will remove the goblins label from the goblinLabelVector
 void MainWindow::killGoblin(int i)
 {
-    //goblinLabelVector->pop_back();
+    goblinLabelVector->at(i)->setPixmap(QPixmap());
+    goblinLabelVector->at(i)->show();
 }
 
 // the slot used by the model to cause the parchment page to display

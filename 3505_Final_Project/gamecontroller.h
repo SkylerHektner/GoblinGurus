@@ -32,6 +32,7 @@ signals:
 
 public slots:
     void moveRequested(std::string movement);
+    void answerReceived(int answer);
 
 private:
     // variables to keep track of the current game state
@@ -48,6 +49,7 @@ private:
     QImage * playerSprite_l;
     QImage * playerSprite_r;
     char lastMoveDirection = 'f'; // tells us what playerImage to send to the view. Assigned during movement
+    bool moveAllowed = true; // used to determine if the player is allowed to move currently
     // the size of the grid in pixels and it's total number of grid units in x and z
     int gridRatio = 80;
     int maxGridSizeY = 9;

@@ -96,26 +96,29 @@ void GameController::moveRequested(std::string movement)
     oldPosX = PlayerPosX;
     oldPosY = PlayerPosY;
 
-    // calculate the movement
-    if (movement == "UP" && PlayerPosY > 0)
+    if (moveAllowed)
     {
-        PlayerPosY--;
-        lastMoveDirection = 'b';
-    }
-    else if (movement == "DOWN" && PlayerPosY < maxGridSizeY)
-    {
-        PlayerPosY++;
-        lastMoveDirection = 'f';
-    }
-    else if (movement == "LEFT" && PlayerPosX > 0)
-    {
-        PlayerPosX--;
-        lastMoveDirection = 'l';
-    }
-    else if (movement == "RIGHT" && PlayerPosX < maxGridSizeX)
-    {
-        PlayerPosX++;
-        lastMoveDirection = 'r';
+        // calculate the movement
+        if (movement == "UP" && PlayerPosY > 0)
+        {
+            PlayerPosY--;
+            lastMoveDirection = 'b';
+        }
+        else if (movement == "DOWN" && PlayerPosY < maxGridSizeY)
+        {
+            PlayerPosY++;
+            lastMoveDirection = 'f';
+        }
+        else if (movement == "LEFT" && PlayerPosX > 0)
+        {
+            PlayerPosX--;
+            lastMoveDirection = 'l';
+        }
+        else if (movement == "RIGHT" && PlayerPosX < maxGridSizeX)
+        {
+            PlayerPosX++;
+            lastMoveDirection = 'r';
+        }
     }
 
     // check for collision and revert movement if necessary
@@ -128,16 +131,62 @@ void GameController::moveRequested(std::string movement)
         }
     }
 
+    // check for collision with goblins
     for (int i = 0; i < goblinVector->size();i++)
     {
         if (goblinVector->at(i)->posX == PlayerPosX && goblinVector->at(i)->posY == PlayerPosY)
         {
+            moveAllowed = false;
             emit showParchment(goblinVector->at(i)->question, true, parchmentImage);
         }
     }
 
     // tell the view to show where the player now is
     loadPlayerImage();
+}
+
+// the slot used to catch an answer submitted in the view
+void GameController::answerReceived(int answer)
+{
+    // allow the player to move again
+    moveAllowed = true;
+
+    // find the goblin currently colliding with the player and kill them if the player answered correctly
+    for (int i = 0; i < goblinVector->size();i++)
+    {
+        if (goblinVector->at(i)->posX == PlayerPosX && goblinVector->at(i)->posY == PlayerPosY)
+        {
+            // convenient debug line to show us the correct answer to the question
+            std::cout << goblinVector->at(i)->answer << std::endl;
+
+            if (goblinVector->at(i)->answer == answer)
+            {
+                // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
+                delete goblinVector->at(i);
+
+                // create a new vector to store the goblins. We have to do this to reset vector.size
+                std::vector<goblin*> * newVector = new std::vector<goblin*>();
+
+                // store all old goblins in the new vector except the one we are killing
+                for(int v = 0; v < goblinVector->size(); v++)
+                {
+                    if (v != i)
+                    {
+                        newVector->push_back(goblinVector->at(v));
+                    }
+                }
+
+                // delete the old goblin vector and assign goblinVector to the new vector
+                delete goblinVector;
+                goblinVector = newVector;
+
+                // tell the screen to update
+                emit loadGoblinImages();
+                // make sure we are not rendering the slot for the old goblin
+                emit killGoblin(goblinVector->size());
+            }
+        }
+    }
 }
 
 // re-populate the collision vector with the proper points based on the level
@@ -220,11 +269,24 @@ void GameController::generateLevelCollisionPoints(int level)
     }
 }
 
+// this methods spawns goblins based on the level entered
 void GameController::generateGoblins(int level)
 {
     if (level == 1)
     {
         Question q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(2, 2, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(5, 2, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(5, 7, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(9, 2, q.text, q.answer));
+    }
+    else
+    {
+        std::cout <<"you have not programmed in goblin spawn locations for this level in GameController::generateGoblins" << std::endl;
     }
 }
