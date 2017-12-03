@@ -7,7 +7,7 @@
 class goblin
 {
 public:
-    goblin(int x, int y, char* questionText, int answer);
+    goblin(int x, int y, std::string questionText, int answer);
     ~goblin();
 
     // Position

@@ -12,3 +12,10 @@ Question::~Question()
 
 }
 
+Question::Question(const Question &other)
+{
+    answer = other.answer;
+    text = other.text;
+    tier = other.tier;
+}
+

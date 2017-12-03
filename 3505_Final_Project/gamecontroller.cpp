@@ -4,6 +4,8 @@
 #include <QCoreApplication>
 #include <iostream>
 #include "goblin.h"
+#include "questionmanager.h"
+#include "question.h"
 
 // destructor for the Game Controller Class
 GameController::~GameController()
@@ -29,7 +31,7 @@ GameController::GameController(QObject * parent) : QObject(parent)
     generateLevelCollisionPoints(1);
 
     // add some goblins to the goblinVector
-    goblinVector->push_back(new goblin(2, 7, "What is the meaning of life!?", 42));
+    generateGoblins(1);
 
     // load in the parchmentImage
     parchmentImage = new QImage("../Assets/parchment.png");
@@ -215,5 +217,14 @@ void GameController::generateLevelCollisionPoints(int level)
         }
 
         //level 3 inner wall points go here
+    }
+}
+
+void GameController::generateGoblins(int level)
+{
+    if (level == 1)
+    {
+        Question q = questionManager->GetQuestion(1);
+        //goblinVector->push_back(new goblin(2, 2, q.text, q.answer));
     }
 }

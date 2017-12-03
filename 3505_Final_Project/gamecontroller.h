@@ -2,6 +2,7 @@
 #define GAMECONTROLLER_H
 #include <QObject>
 #include "goblin.h"
+#include "questionmanager.h"
 
 /*
  * This class is the primary model object for the game. It ultimately is responsible for interfacing with the view.
@@ -59,11 +60,16 @@ private:
     // a vector of the goblins on the map
     std::vector<goblin*> * goblinVector = new std::vector<goblin*>();
 
+    // the question manager
+    QuestionManager * questionManager = new QuestionManager();
+
     // the method called to emit a signal for the view to move the player
     void movePlayer(std::string movement);
 
     // populates the collision vector with the proper points given the level
     void generateLevelCollisionPoints(int level);
+    // populates the goblins vector with the proper goblins given the level
+    void generateGoblins(int level);
 };
 
 
