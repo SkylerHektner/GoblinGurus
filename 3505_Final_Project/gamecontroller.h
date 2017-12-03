@@ -61,6 +61,9 @@ private:
 
     // the method called to emit a signal for the view to move the player
     void movePlayer(std::string movement);
+
+    // populates the collision vector with the proper points given the level
+    void generateLevelCollisionPoints(int level);
 };
 
 
