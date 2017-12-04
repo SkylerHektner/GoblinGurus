@@ -29,17 +29,20 @@ SOURCES += \
     gamecontroller.cpp \
     goblin.cpp \
     questionmanager.cpp \
-    question.cpp
+    question.cpp \
+    startmenu.cpp
 
 HEADERS += \
         mainwindow.h \
     gamecontroller.h \
     goblin.h \
     questionmanager.h \
-    question.h
+    question.h \
+    startmenu.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    startmenu.ui
 
 win32: LIBS += -L"$$PWD/../../SFML-2.4.2/lib" -lsfml-main-d -lsfml-audio-d -lsfml-window-d -lsfml-graphics-d -lsfml-system-d -lsfml-network-d
 

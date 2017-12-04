@@ -1,0 +1,24 @@
+#include "startmenu.h"
+#include "ui_startmenu.h"
+#include <string>
+
+startmenu::startmenu(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::startmenu)
+{
+    ui->setupUi(this);
+}
+
+startmenu::~startmenu()
+{
+    delete ui;
+}
+
+void startmenu::on_difficultySlider_sliderMoved(int position)
+{   
+    ui->difficultyLabel->text() = std::to_string(position);
+}
+void startmenu::on_play_clicked()
+{
+    
+}
