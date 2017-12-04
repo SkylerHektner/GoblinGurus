@@ -336,6 +336,7 @@ void GameController::generateLevelCollisionPoints()
 // this methods spawns goblins based on the level entered
 void GameController::generateGoblins()
 {
+    goblinVector->clear();
     if (level == 1)
     {
         Question q = questionManager->GetQuestion(0);
@@ -361,11 +362,11 @@ void GameController::generateGoblins()
         goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
         q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(4, 3, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(8, 2, q.text, q.answer));
         q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(1, 1, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(0);*/
     }
     else if(level == 3)
     {
@@ -379,13 +380,13 @@ void GameController::generateGoblins()
         goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
         q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(5, 1, q.text, q.answer));
         q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(3, 1, q.text, q.answer));
         q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(11, 3, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(0);*/
     }
     else
     {
@@ -426,5 +427,6 @@ void GameController::generateNextLevel()
         default:
             break;
     }
-
+    loadPlayerImage();
+    loadGoblinImages();
 }
