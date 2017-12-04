@@ -6,6 +6,7 @@
 #include "goblin.h"
 #include "questionmanager.h"
 #include "question.h"
+#include <QString>
 
 // destructor for the Game Controller Class
 GameController::~GameController()
@@ -52,7 +53,8 @@ GameController::GameController(QObject * parent) : QObject(parent)
 // private method to load in a map Image. Will likely take in a QImage later
 void GameController::loadMapImage()
 {
-    QImage testImage("../Assets/level_1.jpg");
+    QString filepath = "../Assets/level_" + QString::number(level) + ".jpg";
+    QImage testImage(filepath);
 
     emit changeMapImageRequest(&testImage);
 }
