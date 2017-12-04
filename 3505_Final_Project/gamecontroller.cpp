@@ -28,10 +28,10 @@ GameController::GameController(QObject * parent) : QObject(parent)
     playerSprite_r->setDevicePixelRatio(ratio);
 
     // populate the collision point vector with wall positions for level 1
-    generateLevelCollisionPoints(1);
+    generateLevelCollisionPoints();
 
     // add some goblins to the goblinVector
-    generateGoblins(1);
+    generateGoblins();
 
     // load in the parchmentImage
     parchmentImage = new QImage("../Assets/parchment.png");
@@ -163,7 +163,10 @@ void GameController::answerReceived(int answer)
             {
                 // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
                 delete goblinVector->at(i);
-
+                if(goblinVector->empty())
+                {
+                    generateNextLevel();
+                }
                 // create a new vector to store the goblins. We have to do this to reset vector.size
                 std::vector<goblin*> * newVector = new std::vector<goblin*>();
 
@@ -184,13 +187,15 @@ void GameController::answerReceived(int answer)
                 emit loadGoblinImages();
                 // make sure we are not rendering the slot for the old goblin
                 emit killGoblin(goblinVector->size());
+
+
             }
         }
     }
 }
 
 // re-populate the collision vector with the proper points based on the level
-void GameController::generateLevelCollisionPoints(int level)
+void GameController::generateLevelCollisionPoints()
 {
     collisionPoints->clear();
 
@@ -326,7 +331,7 @@ void GameController::generateLevelCollisionPoints(int level)
 }
 
 // this methods spawns goblins based on the level entered
-void GameController::generateGoblins(int level)
+void GameController::generateGoblins()
 {
     if (level == 1)
     {
@@ -341,8 +346,80 @@ void GameController::generateGoblins(int level)
         q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(9, 2, q.text, q.answer));
     }
+    else if (level == 2)
+    {
+        Question q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(13, 7, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(7, 8, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(7, 5, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(4, 3, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(8, 2, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(1, 1, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+    }
+    else if(level == 3)
+    {
+        Question q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(12, 7, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(14, 1, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(6, 5, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(5, 1, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(3, 1, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+        goblinVector->push_back(new goblin(11, 3, q.text, q.answer));
+        q = questionManager->GetQuestion(0);
+    }
     else
     {
         std::cout <<"you have not programmed in goblin spawn locations for this level in GameController::generateGoblins" << std::endl;
     }
+}
+
+void GameController::generateNextLevel()
+{
+    if (level >= 3)
+    {
+        level = 1;
+    }
+    else
+    {
+        level++;
+    }
+    loadMapImage();
+    generateLevelCollisionPoints();
+    generateGoblins();
+    // sets the players starting location for the level
+    switch (level)
+    {
+        case 1:
+            PlayerPosX = 14;
+            PlayerPosY = 4;
+            break;
+        case 2:
+            PlayerPosX = 13;
+            PlayerPosY = 2;
+            break;
+        case 3:
+            PlayerPosX = 14;
+            PlayerPosY = 3;
+            break;
+        default:
+            break;
+    }
+
 }

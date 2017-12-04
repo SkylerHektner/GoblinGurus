@@ -39,6 +39,9 @@ private:
     int PlayerPosX = 0;
     int PlayerPosY = 0;
 
+    // current level
+    int level = 1;
+
     // the QImage we use to store the map
     QImage * mapImage;
     // the QImage we use to store the parchment paper used in questions and hints
@@ -69,9 +72,10 @@ private:
     void movePlayer(std::string movement);
 
     // populates the collision vector with the proper points given the level
-    void generateLevelCollisionPoints(int level);
+    void generateLevelCollisionPoints();
     // populates the goblins vector with the proper goblins given the level
-    void generateGoblins(int level);
+    void generateGoblins();
+    void generateNextLevel();
 };
 
 
