@@ -1,0 +1,27 @@
+#ifndef STARTMENU_H
+#define STARTMENU_H
+
+#include <QWidget>
+
+namespace Ui {
+class startmenu;
+}
+
+class startmenu : public QWidget
+{
+    Q_OBJECT
+
+public:
+    explicit startmenu(QWidget *parent = 0);
+    ~startmenu();
+
+private slots:
+    void on_difficultySlider_sliderMoved(int position);
+    
+    void on_play_clicked();
+    
+private:
+    Ui::startmenu *ui;
+};
+
+#endif // STARTMENU_H
