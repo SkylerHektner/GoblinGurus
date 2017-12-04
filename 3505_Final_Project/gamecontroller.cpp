@@ -248,7 +248,28 @@ void GameController::generateLevelCollisionPoints(int level)
             collisionPoints->push_back(std::pair<int, int>(15, i));
         }
 
-        // level 2 inner wall points go here
+        collisionPoints->push_back(std::pair<int, int>(3, 1));
+        collisionPoints->push_back(std::pair<int, int>(11, 1));
+        collisionPoints->push_back(std::pair<int, int>(5, 2));
+        collisionPoints->push_back(std::pair<int, int>(7, 2));
+        collisionPoints->push_back(std::pair<int, int>(9, 2));
+        collisionPoints->push_back(std::pair<int, int>(3, 3));
+        collisionPoints->push_back(std::pair<int, int>(11, 3));
+        for (int i = 2; i < 13; i++)
+        {
+            collisionPoints->push_back(std::pair<int, int>(i, 4));
+        }
+        collisionPoints->push_back(std::pair<int, int>(14, 4));
+        collisionPoints->push_back(std::pair<int, int>(3, 5));
+        collisionPoints->push_back(std::pair<int, int>(11, 5));
+        collisionPoints->push_back(std::pair<int, int>(6, 6));
+        collisionPoints->push_back(std::pair<int, int>(7, 6));
+        collisionPoints->push_back(std::pair<int, int>(8, 6));
+        collisionPoints->push_back(std::pair<int, int>(6, 7));
+        collisionPoints->push_back(std::pair<int, int>(7, 7));
+        collisionPoints->push_back(std::pair<int, int>(8, 7));
+        collisionPoints->push_back(std::pair<int, int>(3, 8));
+        collisionPoints->push_back(std::pair<int, int>(11, 8));
     }
 
     if(level == 3)
@@ -265,7 +286,42 @@ void GameController::generateLevelCollisionPoints(int level)
             collisionPoints->push_back(std::pair<int, int>(15, i));
         }
 
-        //level 3 inner wall points go here
+        collisionPoints->push_back(std::pair<int, int>(4, 1));
+        collisionPoints->push_back(std::pair<int, int>(10, 1));
+        for(int i = 2; i < 9; i++)
+        {
+            collisionPoints->push_back(std::pair<int, int>(i, 2));
+        }
+        collisionPoints->push_back(std::pair<int, int>(10, 2));
+        collisionPoints->push_back(std::pair<int, int>(12, 2));
+        collisionPoints->push_back(std::pair<int, int>(14, 2));
+        collisionPoints->push_back(std::pair<int, int>(12, 3));
+        collisionPoints->push_back(std::pair<int, int>(1, 4));
+        collisionPoints->push_back(std::pair<int, int>(2, 4));
+        collisionPoints->push_back(std::pair<int, int>(3, 4));
+        for(int i = 5; i < 13; i++)
+        {
+            collisionPoints->push_back(std::pair<int, int>(i, 4));
+        }
+        collisionPoints->push_back(std::pair<int, int>(14, 4));
+        collisionPoints->push_back(std::pair<int, int>(5, 5));
+        collisionPoints->push_back(std::pair<int, int>(9, 5));
+        collisionPoints->push_back(std::pair<int, int>(2, 6));
+        collisionPoints->push_back(std::pair<int, int>(3, 6));
+        collisionPoints->push_back(std::pair<int, int>(5, 6));
+        collisionPoints->push_back(std::pair<int, int>(7, 6));
+        collisionPoints->push_back(std::pair<int, int>(11, 6));
+        collisionPoints->push_back(std::pair<int, int>(12, 6));
+        collisionPoints->push_back(std::pair<int, int>(13, 6));
+        collisionPoints->push_back(std::pair<int, int>(3, 7));
+        collisionPoints->push_back(std::pair<int, int>(5, 7));
+        collisionPoints->push_back(std::pair<int, int>(7, 7));
+        collisionPoints->push_back(std::pair<int, int>(8, 7));
+        collisionPoints->push_back(std::pair<int, int>(9, 7));
+        collisionPoints->push_back(std::pair<int, int>(11, 7));
+        collisionPoints->push_back(std::pair<int, int>(13, 7));
+        collisionPoints->push_back(std::pair<int, int>(5, 8));
+        collisionPoints->push_back(std::pair<int, int>(11, 8));
     }
 }
 
