@@ -160,37 +160,38 @@ void GameController::answerReceived(int answer)
         {
             // convenient debug line to show us the correct answer to the question
             std::cout << goblinVector->at(i)->answer << std::endl;
-
+            std::cout << goblinVector->size() << std::endl;
             if (goblinVector->at(i)->answer == answer)
             {
                 // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
                 delete goblinVector->at(i);
-                if(goblinVector->empty())
+                if(goblinVector->size() == 1)
                 {
                     generateNextLevel();
                 }
-                // create a new vector to store the goblins. We have to do this to reset vector.size
-                std::vector<goblin*> * newVector = new std::vector<goblin*>();
-
-                // store all old goblins in the new vector except the one we are killing
-                for(int v = 0; v < goblinVector->size(); v++)
+                else
                 {
-                    if (v != i)
+                    // create a new vector to store the goblins. We have to do this to reset vector.size
+                    std::vector<goblin*> * newVector = new std::vector<goblin*>();
+
+                    // store all old goblins in the new vector except the one we are killing
+                    for(int v = 0; v < goblinVector->size(); v++)
                     {
-                        newVector->push_back(goblinVector->at(v));
+                        if (v != i)
+                        {
+                            newVector->push_back(goblinVector->at(v));
+                        }
                     }
+
+                    // delete the old goblin vector and assign goblinVector to the new vector
+                    delete goblinVector;
+                    goblinVector = newVector;
+
+                    // tell the screen to update
+                    emit loadGoblinImages();
+                    // make sure we are not rendering the slot for the old goblin
+                    emit killGoblin(goblinVector->size());
                 }
-
-                // delete the old goblin vector and assign goblinVector to the new vector
-                delete goblinVector;
-                goblinVector = newVector;
-
-                // tell the screen to update
-                emit loadGoblinImages();
-                // make sure we are not rendering the slot for the old goblin
-                emit killGoblin(goblinVector->size());
-
-
             }
         }
     }
@@ -394,6 +395,7 @@ void GameController::generateGoblins()
 
 void GameController::generateNextLevel()
 {
+    // loops around after completion
     if (level >= 3)
     {
         level = 1;
@@ -405,6 +407,7 @@ void GameController::generateNextLevel()
     loadMapImage();
     generateLevelCollisionPoints();
     generateGoblins();
+
     // sets the players starting location for the level
     switch (level)
     {
