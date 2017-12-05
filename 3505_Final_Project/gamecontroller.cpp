@@ -31,23 +31,20 @@ GameController::GameController(QObject * parent) : QObject(parent)
     // populate the collision point vector with wall positions for level 1
     generateLevelCollisionPoints();
 
-    // add some goblins to the goblinVector
-    generateGoblins();
-
     // load in the parchmentImage
     parchmentImage = new QImage("../Assets/parchment.png");
 
     // define player starting location (level 1)
     PlayerPosX = 14;
     PlayerPosY = 4;
+}
 
-    // here are the intended player spawns for future levels
-    // define player starting location (level 2)
-    //PlayerPosX = 13;
-    //PlayerPosY = 2;
-    // define player starting location (level 3)
-    //PlayerPosX = 14;
-    //PlayerPosY = 3;
+void GameController::startGame()
+{
+    loadMapImage();
+    loadPlayerImage();
+    generateGoblins();
+    loadGoblinImages();
 }
 
 // private method to load in a map Image. Will likely take in a QImage later
@@ -339,28 +336,28 @@ void GameController::generateGoblins()
     goblinVector->clear();
     if (level == 1)
     {
-        Question q = questionManager->GetQuestion(0);
+        Question q = questionManager->GetQuestion(diff - 1);
         goblinVector->push_back(new goblin(2, 2, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff - 1);
         goblinVector->push_back(new goblin(5, 2, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff - 1);
         goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff - 1);
         goblinVector->push_back(new goblin(5, 7, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff - 1);
         goblinVector->push_back(new goblin(9, 2, q.text, q.answer));
     }
     else if (level == 2)
     {
-        Question q = questionManager->GetQuestion(0);
+        Question q = questionManager->GetQuestion(diff);
         goblinVector->push_back(new goblin(13, 7, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff);
         goblinVector->push_back(new goblin(7, 8, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff);
         goblinVector->push_back(new goblin(7, 5, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff);
         goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff);
         goblinVector->push_back(new goblin(4, 3, q.text, q.answer));
         /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(8, 2, q.text, q.answer));
@@ -370,15 +367,15 @@ void GameController::generateGoblins()
     }
     else if(level == 3)
     {
-        Question q = questionManager->GetQuestion(0);
+        Question q = questionManager->GetQuestion(diff + 1);
         goblinVector->push_back(new goblin(12, 7, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff + 1);
         goblinVector->push_back(new goblin(14, 1, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff + 1);
         goblinVector->push_back(new goblin(6, 5, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff + 1);
         goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
-        q = questionManager->GetQuestion(0);
+        q = questionManager->GetQuestion(diff + 1);
         goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
         /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(5, 1, q.text, q.answer));

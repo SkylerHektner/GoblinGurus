@@ -30,8 +30,8 @@ SOURCES += \
     goblin.cpp \
     questionmanager.cpp \
     question.cpp \
-    startmenu.cpp \
-    pathfinder.cpp
+    pathfinder.cpp \
+    difficultyselector.cpp
     pathfinder.cpp
 
 HEADERS += \
@@ -40,13 +40,13 @@ HEADERS += \
     goblin.h \
     questionmanager.h \
     question.h \
-    startmenu.h \
-    pathfinder.h
+    pathfinder.h \
+    difficultyselector.h
     pathfinder.h
 
 FORMS += \
         mainwindow.ui \
-    startmenu.ui
+    difficultyselector.ui
 
 win32: LIBS += -L"$$PWD/../../SFML-2.4.2/lib" -lsfml-main-d -lsfml-audio-d -lsfml-window-d -lsfml-graphics-d -lsfml-system-d -lsfml-network-d
 

@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "difficultyselector.h"
 #include "ui_mainwindow.h"
 #include <QKeyEvent>
 #include <iostream>
@@ -44,13 +45,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(controller, SIGNAL(showParchment(QString,bool,QImage*)), this, SLOT(showParchment(QString,bool,QImage*)));
     connect(this, SIGNAL(answerSubmitted(int)), controller, SLOT(answerReceived(int)));
 
+    difficultyselector * selector = new difficultyselector;
+    connect(selector, SIGNAL(playGame(int)), this, SLOT(startGame(int)));
+    selector->setModal(true);
+    selector->exec();
+}
 
-    // tell the controller to load the map
-    controller->loadMapImage();
-    // move the player to their start position
-    controller->loadPlayerImage();
-    // load any goblins in the scene
-    controller->loadGoblinImages();
+void MainWindow::startGame(int difficulty)
+{
+    controller->diff = difficulty;
+    controller->startGame();
 }
 
 // destructor for main window

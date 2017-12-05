@@ -19,6 +19,8 @@ public:
     void loadMapImage();
     void loadPlayerImage();
     void loadGoblinImages();
+    int diff;
+    void startGame();
 
 signals:
     void changeMapImageRequest(QImage * image);
