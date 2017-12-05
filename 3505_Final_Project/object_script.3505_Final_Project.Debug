@@ -6,6 +6,7 @@ INPUT(
 ./debug\questionmanager.o
 ./debug\question.o
 ./debug\startmenu.o
+./debug\pathfinder.o
 ./debug\moc_mainwindow.o
 ./debug\moc_gamecontroller.o
 ./debug\moc_startmenu.o

@@ -6,6 +6,7 @@ INPUT(
 ./release\questionmanager.o
 ./release\question.o
 ./release\startmenu.o
+./release\pathfinder.o
 ./release\moc_mainwindow.o
 ./release\moc_gamecontroller.o
 ./release\moc_startmenu.o
