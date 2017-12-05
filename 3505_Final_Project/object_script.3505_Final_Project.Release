@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\gamecontroller.o
+./release\goblin.o
+./release\questionmanager.o
+./release\question.o
+./release\startmenu.o
+./release\moc_mainwindow.o
+./release\moc_gamecontroller.o
+./release\moc_startmenu.o
+);

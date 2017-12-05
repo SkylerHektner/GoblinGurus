@@ -28,25 +28,21 @@ SOURCES += \
         mainwindow.cpp \
     gamecontroller.cpp \
     goblin.cpp \
-<<<<<<< HEAD
     questionmanager.cpp \
     question.cpp \
-    startmenu.cpp
-=======
+    startmenu.cpp \
     pathfinder.cpp
->>>>>>> simplePathfinding
+    pathfinder.cpp
 
 HEADERS += \
         mainwindow.h \
     gamecontroller.h \
     goblin.h \
-<<<<<<< HEAD
     questionmanager.h \
     question.h \
-    startmenu.h
-=======
+    startmenu.h \
     pathfinder.h
->>>>>>> simplePathfinding
+    pathfinder.h
 
 FORMS += \
         mainwindow.ui \
