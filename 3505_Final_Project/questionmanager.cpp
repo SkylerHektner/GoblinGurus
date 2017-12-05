@@ -72,8 +72,9 @@ void QuestionManager::ParseQuestion(std::string line)
     answer = std::stoi(itemGroup.at(0));
     tier = std::stoi(itemGroup.at(1)) - 1;
 
+    Question question(answer, tier, itemGroup.at(2), itemGroup.at(3), itemGroup.at(4), itemGroup.at(5));
+
     // add question to the proper question tier vector
-    Question question(answer, tier, itemGroup.at(2));
     questions.at(tier).push_back(question);
 }
 
