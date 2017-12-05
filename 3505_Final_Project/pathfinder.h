@@ -6,12 +6,12 @@
 class Pathfinder
 {
 public:
-    Pathfinder(std::vector<std::pair<int, int>> * collisionPoints);
-    std::vector<std::pair<int, int>> findPath(int enemy_x, int enemy_y, int speed, int player_x, int player_y, double get_close, double move_to_row_column);
-    bool shouldAttack(QString enemyType, int player_x, int player_y);
+    Pathfinder(std::vector<std::pair<int, int>> & collisionPoints, int width, int height);
+    std::vector<std::pair<int, int>> findPath(std::vector<std::pair<int, int>> &enemyLocations, int activeEnemyIndex, int speed, double align, double approach, std::pair<int, int> playerLocation);
 private:
-    bool map[10][16];
-    int pathfind(int enemy_x, int enemy_y, int speed, int player_x, int player_y, double get_close, double move_to_row_column, QString &result);
+    bool walls[10][16];
+    int height;
+    int width;
+    void debugPrintMap(std::vector<std::pair<int, int>> & enemyLocations, std::pair<int, int> & playerLocation, std::vector<std::pair<int, int>> & path);
 };
-
 #endif // PATHFINDER_H

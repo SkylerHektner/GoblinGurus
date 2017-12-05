@@ -2,6 +2,9 @@
 #include "ui_mainwindow.h"
 #include <QKeyEvent>
 #include <iostream>
+#include "pathfinder.h"
+
+void testPathfind(int, int);
 
 // Constructor for main window
 MainWindow::MainWindow(QWidget *parent) :
@@ -74,6 +77,7 @@ void MainWindow::changePlayerImage(QImage *image, int x, int y)
     ui->PlayerLabel->setPixmap(QPixmap::fromImage(*image));
     ui->PlayerLabel->move(x, y);
     ui->PlayerLabel->show();
+    testPathfind((x-20)/80, (y-20)/80);
 }
 
 // the slot used to change the image and location of the image of a goblin on the screen
@@ -174,6 +178,57 @@ void MainWindow::keyPressEvent(QKeyEvent *KeyEvent)
         emit moveRequested(std::string("LEFT"));
     }
 }
+
+void testPathfind(int x, int y) {
+    std::vector<std::pair<int, int>> collisionPoints;
+
+    // create border points
+    for(int i = 0; i < 16; i++)
+    {
+        collisionPoints.push_back(std::pair<int, int>(i, 0));
+        collisionPoints.push_back(std::pair<int, int>(i, 9));
+    }
+    for(int i = 0; i < 10; i++)
+    {
+        collisionPoints.push_back(std::pair<int, int>(0, i));
+        collisionPoints.push_back(std::pair<int, int>(15, i));
+    }
+
+    // define level 1 inner walls
+    collisionPoints.push_back(std::pair<int, int>(1, 4));
+    collisionPoints.push_back(std::pair<int, int>(1, 5));
+    collisionPoints.push_back(std::pair<int, int>(3, 4));
+    collisionPoints.push_back(std::pair<int, int>(3, 5));
+    collisionPoints.push_back(std::pair<int, int>(4, 4));
+    collisionPoints.push_back(std::pair<int, int>(4, 5));
+    collisionPoints.push_back(std::pair<int, int>(6, 4));
+    collisionPoints.push_back(std::pair<int, int>(6, 5));
+    collisionPoints.push_back(std::pair<int, int>(7, 1));
+    collisionPoints.push_back(std::pair<int, int>(7, 3));
+    collisionPoints.push_back(std::pair<int, int>(7, 4));
+    collisionPoints.push_back(std::pair<int, int>(7, 5));
+    collisionPoints.push_back(std::pair<int, int>(7, 6));
+    collisionPoints.push_back(std::pair<int, int>(7, 7));
+    collisionPoints.push_back(std::pair<int, int>(7, 8));
+    collisionPoints.push_back(std::pair<int, int>(10, 3));
+    collisionPoints.push_back(std::pair<int, int>(10, 6));
+    collisionPoints.push_back(std::pair<int, int>(11, 2));
+    collisionPoints.push_back(std::pair<int, int>(11, 3));
+    collisionPoints.push_back(std::pair<int, int>(11, 6));
+    collisionPoints.push_back(std::pair<int, int>(11, 7));
+    collisionPoints.push_back(std::pair<int, int>(12, 3));
+    collisionPoints.push_back(std::pair<int, int>(12, 6));
+
+    Pathfinder pathfinder(collisionPoints, 10, 16);
+
+    std::vector<std::pair<int, int>> enemies;
+    enemies.push_back(std::pair<int, int>(9, 2));
+
+
+    pathfinder.findPath(enemies, 0, 4, 0.8, -0.2, std::pair<int, int>(x, y));
+}
+
+
 
 // event handler for when the submit answer button is clicked
 void MainWindow::on_SubmitAnswerButton_clicked()
