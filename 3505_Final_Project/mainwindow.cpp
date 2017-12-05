@@ -225,7 +225,7 @@ void testPathfind(int x, int y) {
     enemies.push_back(std::pair<int, int>(9, 2));
 
 
-    pathfinder.findPath(enemies, 0, 4, 0.8, -0.2, std::pair<int, int>(x, y));
+    pathfinder.findPath(enemies, 0, 4, 0, 1, std::pair<int, int>(x, y));
 }
 
 
