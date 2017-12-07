@@ -67,6 +67,13 @@ std::vector<std::pair<int, int>> Pathfinder::findPath(std::vector<std::pair<int,
 
     //Calculate best path
     calcPriorities(playerDistance, approach, alignDistance, align, speed, priorities);
+
+    //Make enemy locations a super low priority so we don't think about moving into them, but keep the same general
+    //"This way!" moveset.
+    for (int i = 0; i < enemyLocations.size(); i++) {
+        priorities[enemyLocations[i].second][enemyLocations[i].first] = -99;
+    }
+
     double find = bestPath(enemyLocations[activeEnemyIndex], priorities, speed);
     QString path = pathfind(enemyLocations[activeEnemyIndex], priorities, speed, find);
 
