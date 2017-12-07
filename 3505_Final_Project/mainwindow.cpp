@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 #include <iostream>
 #include "pathfinder.h"
+#include <QString>
 
 void testPathfind(int, int);
 
@@ -36,13 +37,16 @@ MainWindow::MainWindow(QWidget *parent) :
     // ensure answer button is hidden
     ui->SubmitAnswerButton->hide();
 
+    ui->Health->move(60,20);
+
     // CONNECTIONS
     connect(controller, SIGNAL(changeMapImageRequest(QImage*)), this, SLOT(changeMapImage(QImage*)));
     connect(controller, SIGNAL(changePlayerImageRequest(QImage*,int,int)), this, SLOT(changePlayerImage(QImage*,int,int)));
     connect(this, SIGNAL(moveRequested(std::string)), controller, SLOT(moveRequested(std::string)));
+    connect(controller, SIGNAL(showParchment(QString,bool,QImage*)), this, SLOT(showParchment(QString,bool,QImage*)));
+    connect(controller, SIGNAL(updateHealth(QString)), this, SLOT(updateHealth(QString)));
     connect(controller, SIGNAL(changeGoblinImageRequest(QImage*,int,int,int)), this, SLOT(changeGoblinImage(QImage*,int,int,int)));
     connect(controller, SIGNAL(killGoblin(int)), this, SLOT(killGoblin(int)));
-    connect(controller, SIGNAL(showParchment(QString,bool,QImage*)), this, SLOT(showParchment(QString,bool,QImage*)));
     connect(this, SIGNAL(answerSubmitted(int)), controller, SLOT(answerReceived(int)));
 
     difficultyselector * selector = new difficultyselector;
@@ -71,7 +75,7 @@ void MainWindow::changeMapImage(QImage *newImage)
     ui->MapLabel->setMinimumSize(newImage->size());
     ui->MapLabel->setPixmap(QPixmap::fromImage(*newImage));
     ui->MapLabel->show();
-    ui->centralWidget->setMinimumSize(newImage->size() + QSize(40, 0));
+    ui->centralWidget->setMinimumSize(newImage->size() + QSize(0, 0));
 }
 // the slot used to change the image and location of the image of the player on the screen
 void MainWindow::changePlayerImage(QImage *image, int x, int y)
@@ -134,7 +138,7 @@ void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * 
     ui->ParchmentTextLabel->setMaximumSize(parchmentImage->size()/4);
 
     // move all the widgets to the center of the screen formatted correctly
-    ui->ParchmentLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY - ui->ParchmentLabel->size().height()/2 + 20);
+    ui->ParchmentLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY - ui->ParchmentLabel->size().height()/2);
     ui->ParchmentTextLabel->move(centerX - ui->ParchmentTextLabel->size().width()/2, centerY*.6);
     ui->SubmitAnswerButton->move(centerX - ui->SubmitAnswerButton->size().width()/2, centerY * 1.4);
 
@@ -145,6 +149,14 @@ void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * 
 
     // set focus on the submit answer button to make sure the player cannot move
     ui->SubmitAnswerButton->setFocus();
+}
+
+void MainWindow::updateHealth(QString health)
+{
+    std::cout << "hit" << std::endl;
+    ui->Health->setText(QString("Health: ") + health);
+    ui->Health->move(60,20);
+    ui->Health->show();
 }
 
 // QT GENERATED SLOTS - FROM VIEW

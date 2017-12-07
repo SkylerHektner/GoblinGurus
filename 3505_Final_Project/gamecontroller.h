@@ -25,24 +25,31 @@ public:
 signals:
     void changeMapImageRequest(QImage * image);
     void changePlayerImageRequest(QImage * image, int x, int y);
+    void showParchment(QString QuestionText, bool takeAnswer, QImage * image);
+    void updateHealth(QString health);
 
     // in the two below methods, i refers to the index of the goblin we want to act on
     void changeGoblinImageRequest(QImage * image, int x, int y, int i);
     void killGoblin(int i);
-
-    void showParchment(QString QuestionText, bool takeAnswer, QImage * image);
 
 public slots:
     void moveRequested(std::string movement);
     void answerReceived(int answer);
 
 private:
+
+    int goblinAttackDamage = 10;
+    // player attack: OP AS FUUUUUCCCKKKKK
+
     // variables to keep track of the current game state
     int PlayerPosX = 0;
     int PlayerPosY = 0;
 
     // current level, starts at level 1
     int level = 1;
+
+    // player health
+    int playerHealth = 100;
 
     // the QImage we use to store the map
     QImage * mapImage;

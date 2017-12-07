@@ -45,6 +45,9 @@ void GameController::startGame()
     loadPlayerImage();
     generateGoblins();
     loadGoblinImages();
+
+    QString health(std::to_string(playerHealth).data());
+    emit updateHealth(health);
 }
 
 // private method to load in a map Image. Will likely take in a QImage later
@@ -190,6 +193,21 @@ void GameController::answerReceived(int answer)
                     emit killGoblin(goblinVector->size());
                 }
             }
+
+            else
+            {
+                playerHealth -= goblinAttackDamage;
+                QString health(std::to_string(playerHealth).data());
+                emit updateHealth(health);
+
+                // for now, application simply terminates on loss
+                if (playerHealth <= 0)
+                {
+                    exit(EXIT_SUCCESS);
+                }
+            }
+
+
         }
     }
 }
@@ -405,6 +423,7 @@ void GameController::generateNextLevel()
     loadMapImage();
     generateLevelCollisionPoints();
     generateGoblins();
+    playerHealth = 100;
 
     // sets the players starting location for the level
     switch (level)

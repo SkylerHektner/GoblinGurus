@@ -81,9 +81,10 @@ void QuestionManager::ParseQuestion(std::string line)
 // returns a random question from the requested tier
 Question QuestionManager::GetQuestion(int tier)
 {
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count() + questionCount*10000;
     std::default_random_engine generator(seed);
     std::uniform_int_distribution<int> distribution(0,questions.at(tier).size()-1);
+    questionCount++;
 
     return questions.at(tier).at(distribution(generator));
 }

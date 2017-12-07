@@ -33,6 +33,7 @@ public slots:
     void changeGoblinImage(QImage * image, int x, int y, int i);
     void killGoblin(int i);
     void showParchment(QString textToDisplay, bool takeAnswer, QImage * parchmentImage);
+    void updateHealth(QString health);
     void startGame(int difficulty);
 
 private slots:

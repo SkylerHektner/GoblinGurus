@@ -9,6 +9,7 @@ class QuestionManager
 {
 public:
     unsigned tierCount;
+    unsigned questionCount;  // used as an additional seed modifier to ensure random questions
     std::vector<std::vector<Question>> questions;
 
     QuestionManager();
