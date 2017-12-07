@@ -44,6 +44,8 @@ private:
     // variables to keep track of the current game state
     int PlayerPosX = 0;
     int PlayerPosY = 0;
+    int oldPosX = 0;
+    int oldPosY = 0;
 
     // current level, starts at level 1
     int level = 1;

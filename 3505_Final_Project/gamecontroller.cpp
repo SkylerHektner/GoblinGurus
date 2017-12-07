@@ -94,7 +94,6 @@ void GameController::loadGoblinImages()
 void GameController::moveRequested(std::string movement)
 {
     // record old positions incase there ends up being a collision
-    int oldPosX, oldPosY;
     oldPosX = PlayerPosX;
     oldPosY = PlayerPosY;
 
@@ -196,9 +195,15 @@ void GameController::answerReceived(int answer)
 
             else
             {
+                // player takes damage
                 playerHealth -= goblinAttackDamage;
                 QString health(std::to_string(playerHealth).data());
                 emit updateHealth(health);
+
+                // player returns to pos before attack
+                PlayerPosX = oldPosX;
+                PlayerPosY = oldPosY;
+                emit loadPlayerImage();
 
                 // for now, application simply terminates on loss
                 if (playerHealth <= 0)
