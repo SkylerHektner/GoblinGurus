@@ -3,6 +3,8 @@
 #include <QObject>
 #include "goblin.h"
 #include "questionmanager.h"
+#include <QTimer>
+#include "pathfinder.h"
 
 /*
  * This class is the primary model object for the game. It ultimately is responsible for interfacing with the view.
@@ -35,6 +37,9 @@ signals:
 public slots:
     void moveRequested(std::string movement);
     void answerReceived(int answer);
+
+    // used by an internal QTimer to tick the goblin AI
+    void tickGoblinAI();
 
 private:
 
@@ -78,6 +83,15 @@ private:
 
     // the question manager
     QuestionManager * questionManager = new QuestionManager();
+
+    // the QTimer responsible for ticking the goblin AI
+    QTimer * goblinTimer = new QTimer(this);
+    // The int reponsible for tracking current goblin inbetween AI ticks
+    int curGoblinAIIndex = 0;
+    // the bool that tells the goblin tick whether or not to pathfind
+    bool moveGoblins = false;
+    // the pathfinder that is used to move the goblins
+    Pathfinder *goblinAI;
 
     // the method called to emit a signal for the view to move the player
     void movePlayer(std::string movement);

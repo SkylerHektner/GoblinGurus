@@ -37,6 +37,11 @@ GameController::GameController(QObject * parent) : QObject(parent)
     // define player starting location (level 1)
     PlayerPosX = 14;
     PlayerPosY = 4;
+
+    // connect the goblin AI tick timer
+    connect(goblinTimer, SIGNAL(timeout()), this, SLOT(tickGoblinAI()));
+    goblinTimer->start(1000);
+    goblinAI = new Pathfinder(*collisionPoints, 16, 10);
 }
 
 void GameController::startGame()
@@ -120,6 +125,9 @@ void GameController::moveRequested(std::string movement)
             PlayerPosX++;
             lastMoveDirection = 'r';
         }
+
+        moveAllowed = false;
+        moveGoblins = true;
     }
 
     // check for collision and revert movement if necessary
@@ -132,12 +140,13 @@ void GameController::moveRequested(std::string movement)
         }
     }
 
-    // check for collision with goblins
+    // check for collision with goblins, if collided disable movement for goblins and player b/c parchment is up
     for (int i = 0; i < goblinVector->size();i++)
     {
         if (goblinVector->at(i)->posX == PlayerPosX && goblinVector->at(i)->posY == PlayerPosY)
         {
             moveAllowed = false;
+            moveGoblins = false;
             emit showParchment(goblinVector->at(i)->question, true, parchmentImage);
         }
     }
@@ -149,8 +158,9 @@ void GameController::moveRequested(std::string movement)
 // the slot used to catch an answer submitted in the view
 void GameController::answerReceived(int answer)
 {
-    // allow the player to move again
+    // allow the player and goblins to move again
     moveAllowed = true;
+    moveGoblins = true;
 
     // find the goblin currently colliding with the player and kill them if the player answered correctly
     for (int i = 0; i < goblinVector->size();i++)
@@ -214,6 +224,43 @@ void GameController::answerReceived(int answer)
 
 
         }
+    }
+}
+
+// this method is called regurlary by the goblinTimer (QTimer) inside GameController
+// it's used to tick the goblin AI slowly rather than all at once
+void GameController::tickGoblinAI()
+{
+    std::cout << "ticking goblin AI" << std::endl;
+
+    // if for any reason we don't want to be moving goblins, return immediately
+    if (!moveGoblins)
+    {
+        return;
+    }
+
+
+    // generate a vector of Goblin positions for the pathfinder
+    std::vector<std::pair<int, int>> goblinPositions;
+    for(int i = 0; i < goblinVector->size(); i++)
+    {
+        goblinPositions.push_back(std::pair<int, int>(goblinVector->at(i)->posX, goblinVector->at(i)->posY));
+    }
+
+    //std::vector<std::pair<int, int>> AIResults = goblinAI->findPath(goblinPositions,
+    //                                                               curGoblinAIIndex, 2, 1, 1,
+    //                                                               std::pair<int, int>(PlayerPosX, PlayerPosY));
+    //goblinVector->at(curGoblinAIIndex)->posX = AIResults[0].first;
+    //goblinVector->at(curGoblinAIIndex)->posY = AIResults[0].second;
+    loadGoblinImages();
+
+    // incremement the goblin AI index and reset to 0 if all goblins have moved
+    curGoblinAIIndex++;
+    if (curGoblinAIIndex == goblinVector->size())
+    {
+        curGoblinAIIndex = 0;
+        moveGoblins = false;
+        moveAllowed = true;
     }
 }
 
