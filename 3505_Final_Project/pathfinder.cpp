@@ -71,7 +71,7 @@ std::vector<std::pair<int, int>> Pathfinder::findPath(std::vector<std::pair<int,
     //Make enemy locations a super low priority so we don't think about moving into them, but keep the same general
     //"This way!" moveset.
     for (int i = 0; i < enemyLocations.size(); i++) {
-        priorities[enemyLocations[i].second][enemyLocations[i].first] = -99;
+        priorities[enemyLocations[i].second][enemyLocations[i].first] = -90;
     }
 
     double find = bestPath(enemyLocations[activeEnemyIndex], priorities, speed);
@@ -80,7 +80,7 @@ std::vector<std::pair<int, int>> Pathfinder::findPath(std::vector<std::pair<int,
     //Decode the path string into steps
     std::vector<std::pair<int, int>> result = decodeString(enemyLocations[activeEnemyIndex], path);
 
-    //debugPrintMap(enemyLocations, playerLocation, result);
+    debugPrintMap(enemyLocations, playerLocation, result);
 
     return result;
 }
