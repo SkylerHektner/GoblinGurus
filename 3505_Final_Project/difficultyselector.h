@@ -12,7 +12,7 @@ class difficultyselector : public QDialog
     Q_OBJECT
 
 signals:
-    playGame(int diff);
+    void playGame(int diff);
 
 public:
     explicit difficultyselector(QWidget *parent = 0);
