@@ -41,7 +41,7 @@ GameController::GameController(QObject * parent) : QObject(parent)
     // connect the goblin AI tick timer
     connect(goblinTimer, SIGNAL(timeout()), this, SLOT(tickGoblinAI()));
     goblinTimer->start(1000);
-    goblinAI = new Pathfinder(*collisionPoints, 16, 10);
+    goblinAI = new Pathfinder(*collisionPoints, 10, 16);
 }
 
 void GameController::startGame()

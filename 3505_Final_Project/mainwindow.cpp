@@ -85,7 +85,7 @@ void MainWindow::changePlayerImage(QImage *image, int x, int y)
     ui->PlayerLabel->setPixmap(QPixmap::fromImage(*image));
     ui->PlayerLabel->move(x, y);
     ui->PlayerLabel->show();
-    testPathfind((x-20)/80, (y-20)/80);
+    //testPathfind((x-20)/80, (y-20)/80);
 }
 
 // the slot used to change the image and location of the image of a goblin on the screen
