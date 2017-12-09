@@ -179,7 +179,7 @@ void GameController::moveRequested(std::string movement)
 void GameController::answerReceived(int answer)
 {
     // allow the player and goblins to move again
-    moveAllowed = true;
+    moveAllowed = false;
     moveGoblins = true;
 
     // find the goblin currently colliding with the player and kill them if the player answered correctly
@@ -515,4 +515,6 @@ void GameController::generateNextLevel()
     }
     loadPlayerImage();
     loadGoblinImages();
+
+    goblinAI = new Pathfinder(*collisionPoints, 16, 10);
 }

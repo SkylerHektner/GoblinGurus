@@ -153,7 +153,6 @@ void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * 
 
 void MainWindow::updateHealth(QString health)
 {
-    std::cout << "hit" << std::endl;
     ui->Health->setText(QString("Health: ") + health);
     ui->Health->move(60,20);
     ui->Health->show();
