@@ -147,7 +147,27 @@ void GameController::moveRequested(std::string movement)
         {
             moveAllowed = false;
             moveGoblins = false;
-            emit showParchment(goblinVector->at(i)->question, true, parchmentImage);
+            switch(goblinVector->at(i)->attempts)
+                        {
+                        case 0:
+                            emit showParchment((goblinVector->at(i)->question), true, parchmentImage);
+                            break;
+                        case 1:
+                            emit showParchment((goblinVector->at(i)->question + "\n\nHINT: " + goblinVector->at(i)->hint1), true, parchmentImage);
+                            break;
+                        case 2:
+                        case 3:
+                            emit showParchment((goblinVector->at(i)->question + "\n\nHINT: "
+                                                + goblinVector->at(i)->hint1 + "\n\n"
+                                                + goblinVector->at(i)->hint2), true, parchmentImage);
+                            break;
+                        default:
+                            emit showParchment((goblinVector->at(i)->question + "\n\nHINT: "
+                                                + goblinVector->at(i)->hint1 + "\n\n"
+                                                + goblinVector->at(i)->hint2 + "\n\n"
+                                                + goblinVector->at(i)->hint3), true, parchmentImage);
+                            break;
+                        }
         }
     }
 
@@ -221,8 +241,6 @@ void GameController::answerReceived(int answer)
                     exit(EXIT_SUCCESS);
                 }
             }
-
-
         }
     }
 }
@@ -405,28 +423,28 @@ void GameController::generateGoblins()
     if (level == 1)
     {
         Question q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(2, 2, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 2, q));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(5, 2, q.text, q.answer));
+        goblinVector->push_back(new goblin(5, 2, q));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 7, q));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(5, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(5, 7, q));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(9, 2, q.text, q.answer));
+        goblinVector->push_back(new goblin(9, 2, q));
     }
     else if (level == 2)
     {
         Question q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(13, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(13, 7, q));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(7, 8, q.text, q.answer));
+        goblinVector->push_back(new goblin(7, 8, q));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(7, 5, q.text, q.answer));
+        goblinVector->push_back(new goblin(7, 5, q));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 5, q));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(4, 3, q.text, q.answer));
+        goblinVector->push_back(new goblin(4, 3, q));
         /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(8, 2, q.text, q.answer));
         q = questionManager->GetQuestion(0);
@@ -436,15 +454,15 @@ void GameController::generateGoblins()
     else if(level == 3)
     {
         Question q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(12, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(12, 7, q));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(14, 1, q.text, q.answer));
+        goblinVector->push_back(new goblin(14, 1, q));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(6, 5, q.text, q.answer));
+        goblinVector->push_back(new goblin(6, 5, q));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 5, q));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 7, q));
         /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(5, 1, q.text, q.answer));
         q = questionManager->GetQuestion(0);
