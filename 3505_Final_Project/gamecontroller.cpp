@@ -202,11 +202,11 @@ void GameController::answerReceived(int answer)
                     emit killGoblin(goblinVector->size());
                 }
             }
-
             else
             {
                 // player takes damage
                 playerHealth -= goblinAttackDamage;
+                goblinVector->at(i)->attempts += 1;
                 QString health(std::to_string(playerHealth).data());
                 emit updateHealth(health);
 

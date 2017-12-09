@@ -13,6 +13,7 @@ public:
     // Position
     int posX = 0;
     int posY = 0;
+    int attempts = 0;
     // question and answer
     QString question;
     int answer;

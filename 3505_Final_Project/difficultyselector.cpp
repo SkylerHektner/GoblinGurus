@@ -18,3 +18,8 @@ void difficultyselector::on_PlayButton_clicked()
     emit playGame(ui->difficultyBox->value());
     this->hide();
 }
+
+void difficultyselector::on_difficultyselector_finished(int result)
+{
+    emit playGame(1);
+}
