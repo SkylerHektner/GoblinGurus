@@ -40,7 +40,7 @@ GameController::GameController(QObject * parent) : QObject(parent)
 
     // connect the goblin AI tick timer
     connect(goblinTimer, SIGNAL(timeout()), this, SLOT(tickGoblinAI()));
-    goblinTimer->start(1000);
+    goblinTimer->start(250);
     goblinAI = new Pathfinder(*collisionPoints, 10, 16);
 }
 
@@ -231,7 +231,7 @@ void GameController::answerReceived(int answer)
 // it's used to tick the goblin AI slowly rather than all at once
 void GameController::tickGoblinAI()
 {
-    std::cout << "ticking goblin AI" << std::endl;
+    //std::cout << "ticking goblin AI" << std::endl;
 
     // if for any reason we don't want to be moving goblins, return immediately
     if (!moveGoblins)
@@ -247,9 +247,11 @@ void GameController::tickGoblinAI()
         goblinPositions.push_back(std::pair<int, int>(goblinVector->at(i)->posX, goblinVector->at(i)->posY));
     }
 
-    std::vector<std::pair<int, int>> AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, 1, 0, std::pair<int, int>(PlayerPosX, PlayerPosY));
-    //goblinVector->at(curGoblinAIIndex)->posX = AIResults[0].first;
-    //goblinVector->at(curGoblinAIIndex)->posY = AIResults[0].second;
+    std::vector<std::pair<int, int>> AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, 0, 1, std::pair<int, int>(PlayerPosX, PlayerPosY));
+    if (AIResults.size() > 0) {
+        goblinVector->at(curGoblinAIIndex)->posX = AIResults[0].first;
+        goblinVector->at(curGoblinAIIndex)->posY = AIResults[0].second;
+    }
     loadGoblinImages();
 
     // incremement the goblin AI index and reset to 0 if all goblins have moved
