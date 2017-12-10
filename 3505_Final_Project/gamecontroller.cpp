@@ -265,7 +265,12 @@ void GameController::tickGoblinAI()
         goblinPositions.push_back(std::pair<int, int>(goblinVector->at(i)->posX, goblinVector->at(i)->posY));
     }
 
+
     std::vector<std::pair<int, int>> AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, 0, 1, std::pair<int, int>(PlayerPosX, PlayerPosY));
+    if (goblinVector->at(curGoblinAIIndex)->type == "Mage")
+        AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, -0.5, -0.5, std::pair<int, int>(PlayerPosX, PlayerPosY));
+    else if (goblinVector->at(curGoblinAIIndex)->type == "Archer")
+            AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, 0.8, -0.2, std::pair<int, int>(PlayerPosX, PlayerPosY));
     if (AIResults.size() > 0) {
         goblinVector->at(curGoblinAIIndex)->posX = AIResults[0].first;
         goblinVector->at(curGoblinAIIndex)->posY = AIResults[0].second;
