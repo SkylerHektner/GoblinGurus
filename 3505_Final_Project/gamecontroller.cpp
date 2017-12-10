@@ -300,7 +300,8 @@ void GameController::tickGoblinAI()
                                std::pair<int, int>(PlayerPosX, PlayerPosY),
                                goblinVector->at(curGoblinAIIndex)->type) && goblinMoveCounter == 1)
     {
-        emit showParchment(goblinVector->at(curGoblinAIIndex)->question, true, parchmentImage);
+        emit showParchment("You were attacked by a " + goblinVector->at(curGoblinAIIndex)->type + "\n\n" +
+                           goblinVector->at(curGoblinAIIndex)->question, true, parchmentImage);
         moveAllowed = false;
         moveGoblins = false;
     }
