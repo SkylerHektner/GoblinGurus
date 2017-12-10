@@ -425,28 +425,28 @@ void GameController::generateGoblins()
     if (level == 1)
     {
         Question q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(2, 2, q));
+        goblinVector->push_back(new goblin(2, 2, q, "Mage"));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(5, 2, q));
+        goblinVector->push_back(new goblin(5, 2, q, "Archer"));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(2, 7, q));
+        goblinVector->push_back(new goblin(2, 7, q, "Warrior"));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(5, 7, q));
+        goblinVector->push_back(new goblin(5, 7, q, "Warrior"));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(9, 2, q));
+        goblinVector->push_back(new goblin(9, 2, q, "Warrior"));
     }
     else if (level == 2)
     {
         Question q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(13, 7, q));
+        goblinVector->push_back(new goblin(13, 7, q, "Mage"));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(7, 8, q));
+        goblinVector->push_back(new goblin(7, 8, q, "Archer"));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(7, 5, q));
+        goblinVector->push_back(new goblin(7, 5, q, "Archer"));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(2, 5, q));
+        goblinVector->push_back(new goblin(2, 5, q, "Warrior"));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(4, 3, q));
+        goblinVector->push_back(new goblin(4, 3, q, "Warrior"));
         /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(8, 2, q.text, q.answer));
         q = questionManager->GetQuestion(0);
@@ -456,15 +456,15 @@ void GameController::generateGoblins()
     else if(level == 3)
     {
         Question q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(12, 7, q));
+        goblinVector->push_back(new goblin(12, 7, q, "Mage"));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(14, 1, q));
+        goblinVector->push_back(new goblin(14, 1, q, "Mage"));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(6, 5, q));
+        goblinVector->push_back(new goblin(6, 5, q, "Archer"));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(2, 5, q));
+        goblinVector->push_back(new goblin(2, 5, q, "Warrior"));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(2, 7, q));
+        goblinVector->push_back(new goblin(2, 7, q, "Warrior"));
         /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(5, 1, q.text, q.answer));
         q = questionManager->GetQuestion(0);
@@ -516,5 +516,5 @@ void GameController::generateNextLevel()
     loadPlayerImage();
     loadGoblinImages();
 
-    goblinAI = new Pathfinder(*collisionPoints, 16, 10);
+    goblinAI = new Pathfinder(*collisionPoints, 10, 16);
 }

@@ -8,7 +8,7 @@
 class goblin
 {
 public:
-    goblin(int x, int y, Question q);
+    goblin(int x, int y, Question q, QString t);
     ~goblin();
 
     // Position
@@ -20,6 +20,7 @@ public:
     QString hint1;
     QString hint2;
     QString hint3;
+    QString type;
     int answer;
     // sprites
     QImage * goblinSprite;

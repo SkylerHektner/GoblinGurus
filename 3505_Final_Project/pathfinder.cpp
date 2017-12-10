@@ -82,7 +82,6 @@ std::vector<std::pair<int, int>> Pathfinder::findPath(std::vector<std::pair<int,
     std::vector<std::pair<int, int>> result = decodeString(enemyLocations[activeEnemyIndex], path);
 
     //debugPrintMap(enemyLocations, playerLocation, result);
-
     return result;
 }
 
