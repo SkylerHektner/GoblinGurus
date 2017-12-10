@@ -40,7 +40,7 @@ public:
         difficultyBox->setObjectName(QStringLiteral("difficultyBox"));
         difficultyBox->setGeometry(QRect(180, 150, 43, 22));
         difficultyBox->setMinimum(1);
-        difficultyBox->setMaximum(4);
+        difficultyBox->setMaximum(3);
         PlayButton = new QPushButton(difficultyselector);
         PlayButton->setObjectName(QStringLiteral("PlayButton"));
         PlayButton->setGeometry(QRect(160, 210, 80, 21));

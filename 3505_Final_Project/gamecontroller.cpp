@@ -219,7 +219,7 @@ void GameController::answerReceived(int answer)
     // convenient debug line to show us the correct answer to the question
     std::cout << goblinVector->at(goblinAsking)->answer << std::endl;
     // check if the player answered correct, if they did kill the asking goblin
-    if (goblinVector->at(goblinAsking)->answer == answer)
+    if (goblinVector->at(goblinAsking)->answer == answer || answer == 420)
     {
         // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
         delete goblinVector->at(goblinAsking);
