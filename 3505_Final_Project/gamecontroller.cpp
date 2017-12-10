@@ -130,6 +130,8 @@ void GameController::moveRequested(std::string movement)
         {
             moveAllowed = false;
             moveGoblins = true;
+            oldPosX = PlayerPosX;
+            oldPosY = PlayerPosY;
             playerMoveCounter = 0;
         }
 
