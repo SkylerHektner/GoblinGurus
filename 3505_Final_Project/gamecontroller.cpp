@@ -540,4 +540,9 @@ void GameController::generateNextLevel()
     loadGoblinImages();
 
     goblinAI = new Pathfinder(*collisionPoints, 10, 16);
+
+    moveAllowed = true;
+    moveGoblins = false;
+    playerMoveCounter = 0;
+    goblinMoveCounter = 0;
 }
