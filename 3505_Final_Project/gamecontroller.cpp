@@ -183,7 +183,8 @@ void GameController::moveRequested(std::string movement)
 // the slot used to catch an answer submitted in the view
 void GameController::answerReceived(int answer)
 {
-    if (playerMoveCounter == 0)
+    // re enable movement based on whos turn it is (goblins or players)
+    if (curGoblinAIIndex != 0)
     {
         moveGoblins = true;
         moveAllowed = false;
@@ -194,65 +195,71 @@ void GameController::answerReceived(int answer)
         moveAllowed = true;
     }
 
-    // find the goblin currently colliding with the player and kill them if the player answered correctly
+    // find the goblin currently asking the player
+    int goblinAsking = curGoblinAIIndex;
+    // first, check for a goblin colliding with the player
     for (int i = 0; i < goblinVector->size();i++)
     {
         if (goblinVector->at(i)->posX == PlayerPosX && goblinVector->at(i)->posY == PlayerPosY)
         {
-            // convenient debug line to show us the correct answer to the question
-            std::cout << goblinVector->at(i)->answer << std::endl;
-            std::cout << goblinVector->size() << std::endl;
-            if (goblinVector->at(i)->answer == answer)
+            goblinAsking = i;
+            break;
+        }
+    }
+
+    // convenient debug line to show us the correct answer to the question
+    std::cout << goblinVector->at(goblinAsking)->answer << std::endl;
+    // check if the player answered correct, if they did kill the asking goblin
+    if (goblinVector->at(goblinAsking)->answer == answer)
+    {
+        // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
+        delete goblinVector->at(goblinAsking);
+        if(goblinVector->size() == 1)
+        {
+            generateNextLevel();
+        }
+        else
+        {
+            // create a new vector to store the goblins. We have to do this to reset vector.size
+            std::vector<goblin*> * newVector = new std::vector<goblin*>();
+
+            // store all old goblins in the new vector except the one we are killing
+            for(int v = 0; v < goblinVector->size(); v++)
             {
-                // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
-                delete goblinVector->at(i);
-                if(goblinVector->size() == 1)
+                if (v != goblinAsking)
                 {
-                    generateNextLevel();
-                }
-                else
-                {
-                    // create a new vector to store the goblins. We have to do this to reset vector.size
-                    std::vector<goblin*> * newVector = new std::vector<goblin*>();
-
-                    // store all old goblins in the new vector except the one we are killing
-                    for(int v = 0; v < goblinVector->size(); v++)
-                    {
-                        if (v != i)
-                        {
-                            newVector->push_back(goblinVector->at(v));
-                        }
-                    }
-
-                    // delete the old goblin vector and assign goblinVector to the new vector
-                    delete goblinVector;
-                    goblinVector = newVector;
-
-                    // tell the screen to update
-                    emit loadGoblinImages();
-                    // make sure we are not rendering the slot for the old goblin
-                    emit killGoblin(goblinVector->size());
+                    newVector->push_back(goblinVector->at(v));
                 }
             }
-            else
-            {
-                // player takes damage
-                playerHealth -= goblinAttackDamage;
-                goblinVector->at(i)->attempts += 1;
-                QString health(std::to_string(playerHealth).data());
-                emit updateHealth(health);
 
-                // player returns to pos before attack
-                PlayerPosX = oldPosX;
-                PlayerPosY = oldPosY;
-                emit loadPlayerImage();
+            // delete the old goblin vector and assign goblinVector to the new vector
+            delete goblinVector;
+            goblinVector = newVector;
 
-                // for now, application simply terminates on loss
-                if (playerHealth <= 0)
-                {
-                    exit(EXIT_SUCCESS);
-                }
-            }
+            // tell the screen to update
+            emit loadGoblinImages();
+            // make sure we are not rendering the slot for the old goblin
+            emit killGoblin(goblinVector->size());
+        }
+    }
+    // if they didn't ask correctly, damage the player and end the game if needed
+    else
+    {
+        // player takes damage
+        playerHealth -= goblinAttackDamage;
+        goblinVector->at(goblinAsking)->attempts += 1;
+        QString health(std::to_string(playerHealth).data());
+        emit updateHealth(health);
+
+        // player returns to pos before attack
+        PlayerPosX = oldPosX;
+        PlayerPosY = oldPosY;
+        emit loadPlayerImage();
+
+        // for now (read: forever), application simply terminates on loss
+        if (playerHealth <= 0)
+        {
+            exit(EXIT_SUCCESS);
         }
     }
 }
@@ -277,7 +284,7 @@ void GameController::tickGoblinAI()
         goblinPositions.push_back(std::pair<int, int>(goblinVector->at(i)->posX, goblinVector->at(i)->posY));
     }
 
-
+    // query the pathfinder for the movement for the Goblin based on its type
     std::vector<std::pair<int, int>> AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, 0, 1, std::pair<int, int>(PlayerPosX, PlayerPosY));
     if (goblinVector->at(curGoblinAIIndex)->type == "Mage")
         AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, -0.5, -0.5, std::pair<int, int>(PlayerPosX, PlayerPosY));
@@ -288,6 +295,16 @@ void GameController::tickGoblinAI()
         goblinVector->at(curGoblinAIIndex)->posY = AIResults[0].second;
     }
     loadGoblinImages();
+    // check if that goblin is attacking the player, if they are bring up a question prompt
+    if (goblinAI->shouldAttack(std::pair<int, int>(goblinVector->at(curGoblinAIIndex)->posX, goblinVector->at(curGoblinAIIndex)->posY),
+                               std::pair<int, int>(PlayerPosX, PlayerPosY),
+                               goblinVector->at(curGoblinAIIndex)->type) && goblinMoveCounter == 1)
+    {
+        emit showParchment(goblinVector->at(curGoblinAIIndex)->question, true, parchmentImage);
+        moveAllowed = false;
+        moveGoblins = false;
+    }
+
 
     // incremement the goblin AI index and reset to 0 if all goblins have moved
     goblinMoveCounter++;
