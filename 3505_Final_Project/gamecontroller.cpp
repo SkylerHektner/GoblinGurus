@@ -125,9 +125,14 @@ void GameController::moveRequested(std::string movement)
             PlayerPosX++;
             lastMoveDirection = 'r';
         }
+        playerMoveCounter++;
+        if (playerMoveCounter == 6)
+        {
+            moveAllowed = false;
+            moveGoblins = true;
+            playerMoveCounter = 0;
+        }
 
-        moveAllowed = false;
-        moveGoblins = true;
     }
 
     // check for collision and revert movement if necessary
@@ -178,9 +183,16 @@ void GameController::moveRequested(std::string movement)
 // the slot used to catch an answer submitted in the view
 void GameController::answerReceived(int answer)
 {
-    // allow the player and goblins to move again
-    moveAllowed = false;
-    moveGoblins = true;
+    if (playerMoveCounter == 0)
+    {
+        moveGoblins = true;
+        moveAllowed = false;
+    }
+    else
+    {
+        moveGoblins = false;
+        moveAllowed = true;
+    }
 
     // find the goblin currently colliding with the player and kill them if the player answered correctly
     for (int i = 0; i < goblinVector->size();i++)
@@ -278,7 +290,13 @@ void GameController::tickGoblinAI()
     loadGoblinImages();
 
     // incremement the goblin AI index and reset to 0 if all goblins have moved
-    curGoblinAIIndex++;
+    goblinMoveCounter++;
+    if (goblinMoveCounter == 2)
+    {
+        curGoblinAIIndex++;
+        goblinMoveCounter = 0;
+    }
+
     if (curGoblinAIIndex == goblinVector->size())
     {
         curGoblinAIIndex = 0;

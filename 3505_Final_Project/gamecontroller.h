@@ -93,6 +93,10 @@ private:
     // the pathfinder that is used to move the goblins
     Pathfinder *goblinAI;
 
+    // vairables to keep track of turns
+    int playerMoveCounter = 0;
+    int goblinMoveCounter = 0;
+
     // the method called to emit a signal for the view to move the player
     void movePlayer(std::string movement);
 
