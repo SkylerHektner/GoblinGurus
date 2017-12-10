@@ -5,6 +5,7 @@
 #include "questionmanager.h"
 #include <QTimer>
 #include "pathfinder.h"
+#include <QMediaPlayer>
 
 /*
  * This class is the primary model object for the game. It ultimately is responsible for interfacing with the view.
@@ -96,6 +97,9 @@ private:
     // vairables to keep track of turns
     int playerMoveCounter = 0;
     int goblinMoveCounter = 0;
+
+    // the media player we use to play game music
+    QMediaPlayer * musicPlayer;
 
     // the method called to emit a signal for the view to move the player
     void movePlayer(std::string movement);

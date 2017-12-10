@@ -7,6 +7,7 @@
 #include "questionmanager.h"
 #include "question.h"
 #include <QString>
+#include <QMediaPlayer>
 
 // destructor for the Game Controller Class
 GameController::~GameController()
@@ -42,6 +43,12 @@ GameController::GameController(QObject * parent) : QObject(parent)
     connect(goblinTimer, SIGNAL(timeout()), this, SLOT(tickGoblinAI()));
     goblinTimer->start(250);
     goblinAI = new Pathfinder(*collisionPoints, 10, 16);
+
+    // play a nice jig
+    musicPlayer = new QMediaPlayer;
+    musicPlayer->setMedia(QUrl::fromLocalFile("../Assets/BeepBox-Song.wav"));
+    musicPlayer->setVolume(50);
+    musicPlayer->play();
 }
 
 void GameController::startGame()
