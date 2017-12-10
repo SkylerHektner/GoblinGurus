@@ -196,7 +196,7 @@ void GameController::answerReceived(int answer)
     }
 
     // find the goblin currently asking the player
-    int goblinAsking = curGoblinAIIndex;
+    int goblinAsking = (curGoblinAIIndex-1 + goblinVector->size()) % goblinVector->size();
     // first, check for a goblin colliding with the player
     for (int i = 0; i < goblinVector->size();i++)
     {
