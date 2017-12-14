@@ -9,7 +9,9 @@
 #include "effect.h"
 
 void testPathfind(int, int);
-b2Vec2 gravity(0.0f, 6.0f);
+void removeBodies(QVector<b2Body> &);
+QVector<b2Body*> bodiesToDestroy;
+b2Vec2 gravity(0.0f, 2.0f);
 b2World world(gravity);
 // Constructor for main window
 MainWindow::MainWindow(QWidget *parent) :
@@ -20,7 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Create effects physics
     scale = 80/1.5;
-    createGround(world, 600, 150);
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::updateWorld);
+    timer->start(33);
+    //create the sprite (effect) class
+    _effect = new effect();
     // parse and archive questions from questions.txt
     qManager = new QuestionManager;
 
@@ -54,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(controller, SIGNAL(changeGoblinImageRequest(QImage*,int,int,int)), this, SLOT(changeGoblinImage(QImage*,int,int,int)));
     connect(controller, SIGNAL(killGoblin(int)), this, SLOT(killGoblin(int)));
     connect(this, SIGNAL(answerSubmitted(int)), controller, SLOT(answerReceived(int)));
+    connect(controller, SIGNAL(michaelBay(int,int)), this, SLOT(michaelBay(int,int)));
 
     difficultyselector * selector = new difficultyselector;
     connect(selector, SIGNAL(playGame(int)), this, SLOT(startGame(int)));
@@ -168,12 +175,6 @@ void MainWindow::updateHealth(QString health)
 // this is an event handler for Key Presses
 void MainWindow::keyPressEvent(QKeyEvent *KeyEvent)
 {
-
-
-    //fx->addEffect(images, "bob", 1, ui->PlayerLabel->x(), ui->PlayerLabel->y());
-    emit fireEffect("bob");
-
-
     // first check if the event is the result of someone holding down a key. If it is,
     // ignore the event because we do not care.
     if (KeyEvent->isAutoRepeat())
@@ -265,7 +266,7 @@ void MainWindow::on_SubmitAnswerButton_clicked()
     ui->ParchmentLabel->hide();
     ui->ParchmentTextLabel->hide();
     ui->AnswerLineEdit->hide();
-    makeExplodingGoblin(800, 400);
+    //michaelBay(800, 400);
     // get the answer out of the Answer Line Edit and send it to the model and clear it
     QString answer = ui->AnswerLineEdit->text();
     emit answerSubmitted(answer.toInt());
@@ -282,7 +283,13 @@ for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator
     {
         if (BodyIterator->GetType() == b2_dynamicBody)
         {
-            //For sprite background transform
+            //remvoe the body if it is off screen.
+            if((scale * BodyIterator->GetPosition().y) > 2000){
+                b2Body * bodies = &BodyIterator[BodyCount];
+                bodiesToDestroy.append(bodies);
+                //qDebug() << world.GetBodyCount();
+            }
+            //For sprite background transform.
             _effect->moveEffect(BodyCount, BodyIterator->GetAngle() * 180/b2_pi, scale * BodyIterator->GetPosition().x, scale * BodyIterator->GetPosition().y);
             ++BodyCount;
         }
@@ -296,29 +303,26 @@ void MainWindow::createGround(b2World &world, float posX, float posY)
     BodyDef.type = b2_staticBody;
     b2Body* Body = world.CreateBody(&BodyDef);
     b2PolygonShape Shape;
-    Shape.SetAsBox((1000.0f/2)/scale, (80.0f/2)/scale); // Creates a box shape. Divide your desired width and height by 2.
+    Shape.SetAsBox((1000.0f/2)/scale, (40.0f)/scale); // Creates a box shape. Divide your desired width and height by 2.
     b2FixtureDef FixtureDef;
     FixtureDef.density = 0.f;  // Sets the density of the body
     FixtureDef.shape = &Shape; // Sets the shape
     Body->CreateFixture(&FixtureDef); // Apply the fixture definition
 }
 
-void MainWindow::michaelBay()
+void MainWindow::michaelBay(int x, int y)
 {
-    //Game loop 30fps
-    timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, &MainWindow::updateWorld);
-    timer->start(33);
+    world.ClearForces();
+    makeExplodingGoblin(x, y);
 }
 
 void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
     //add goblin to effect
-    effect* boom = new effect();
     if(body.loadFromFile("../Assets/BODY.png")){}
     if(hand.loadFromFile("../Assets/HAND.png")){}
     QVector<sf::Texture> imagePTRs;
-    for(int i = 0; i < 7; i++){
-        if(i < 2){
+    for(int i = 0; i < 15; i++){
+        if(i < 5){
             imagePTRs.append(body);
         }
         else{
@@ -329,17 +333,18 @@ void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
         BodyDef.position = b2Vec2(goblinY/scale, goblinY/scale); //need to scale the pixel positions to real world positions. World is in meters
         BodyDef.type = b2_dynamicBody;
         b2Body* Body = world.CreateBody(&BodyDef);
-        if(i > 2 && i > 4) {Body->ApplyLinearImpulse(b2Vec2(0, -10), Body->GetWorldCenter(), true);}
+        if(true) {Body->ApplyLinearImpulse(b2Vec2( qrand()%3,  -qrand()%3), Body->GetWorldCenter(), true);}
         b2PolygonShape Shape;
         Shape.SetAsBox((44.0f)/scale, (44.0f)/scale);
         b2FixtureDef FixtureDef;
         FixtureDef.density = 1.f;
-        FixtureDef.friction = 0.8f;
+        FixtureDef.friction = 0.7f;
         FixtureDef.shape = &Shape;
         Body->CreateFixture(&FixtureDef);
     }
-    _effect = boom;
-    boom->addSprite(imagePTRs, goblinX, goblinY, this);
-    michaelBay();
+    _effect->addSprite(imagePTRs, goblinX, goblinY, this);
+}
+
+void removeBodies(QVector<b2Body> &bodies){
 
 }

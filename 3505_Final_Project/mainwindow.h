@@ -30,7 +30,6 @@ public:
 signals:
     void moveRequested(std::string movement);
     void answerSubmitted(int answer);
-    void fireEffect(QString);
 
 public slots:
     void changeMapImage(QImage * newImage);
@@ -40,7 +39,7 @@ public slots:
     void showParchment(QString textToDisplay, bool takeAnswer, QImage * parchmentImage);
     void updateHealth(QString health);
     void startGame(int difficulty);
-    void makeExplodingGoblin(int goblinX, int goblinY);
+    void michaelBay(int x, int y);
 
 private slots:
     void on_SubmitAnswerButton_clicked();
@@ -57,8 +56,10 @@ private:
     //Physics stuff
     //create dynamic bodies
     void createBox(b2World &world, float posX, float posY);
+    //some ground
     void createGround(b2World &world, float posX, float posY);
-    void michaelBay();
+    //help michaelBay make some explosions
+    void makeExplodingGoblin(int, int);
     float scale;
     QTimer* timer;
     effect *_effect;

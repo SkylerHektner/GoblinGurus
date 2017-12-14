@@ -235,6 +235,8 @@ void GameController::answerReceived(int answer)
             // store all old goblins in the new vector except the one we are killing
             for(int v = 0; v < goblinVector->size(); v++)
             {
+                // explode some goblins
+                emit michaelBay(goblinVector->at(i)->posX, goblinVector->at(i)->posY);
                 if (v != goblinAsking)
                 {
                     newVector->push_back(goblinVector->at(v));
