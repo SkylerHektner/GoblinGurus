@@ -2,9 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
 #include "gamecontroller.h"
 #include "questionmanager.h"
+#include "effect.h"
 #include <QLabel>
+#include "Box2D/Box2D.h"
+#include "SFML/Graphics.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +30,7 @@ public:
 signals:
     void moveRequested(std::string movement);
     void answerSubmitted(int answer);
+    void fireEffect(QString);
 
 public slots:
     void changeMapImage(QImage * newImage);
@@ -35,9 +40,11 @@ public slots:
     void showParchment(QString textToDisplay, bool takeAnswer, QImage * parchmentImage);
     void updateHealth(QString health);
     void startGame(int difficulty);
+    void makeExplodingGoblin(int goblinX, int goblinY);
 
 private slots:
     void on_SubmitAnswerButton_clicked();
+    void updateWorld();
 
 private:
     Ui::MainWindow *ui;
@@ -47,6 +54,16 @@ private:
 
     // listens for key press events and fires when one is recieved
     void keyPressEvent(QKeyEvent * KeyEvent);
+    //Physics stuff
+    //create dynamic bodies
+    void createBox(b2World &world, float posX, float posY);
+    void createGround(b2World &world, float posX, float posY);
+    void michaelBay();
+    float scale;
+    QTimer* timer;
+    effect *_effect;
+    sf::Texture body;
+    sf::Texture hand;
 };
 
 #endif // MAINWINDOW_H

@@ -1,67 +1,50 @@
 #include "effect.h"
-
-effect::effect(QWidget *parent) : QWidget(parent)
-{
-    _parent = parent;
-}
+#include <QDebug>
 ///
-/// \brief effect::addSprite: turnes image into a textured sprite and adds it to the sprites vector, original demensions are preserved.
+/// \brief effect::addSprite: add images to sprites vector.
 /// \param image
 ///
-void effect::addSprite(QImage image)
-{
-    const uchar* imageData = image.bits();
-    Sprite *sprite;
-    sprite->spriteTexture.loadFromMemory(imageData, image.byteCount());
-    sprite->transform.setTexture(sprite->spriteTexture);
-    sprite->texture.create(image.size().width(), image.size().height());
-    sprite->height = image.size().height();
-    sprite->width = image.size().width();
-    sprite->canvas = new QLabel(_parent);//set up the QLabel that will be painted.
-    listOfSprites.append(sprite);
-}
-///
-/// \brief effect::addSprite: Overloaded addSprtie with height and width scaling.
-/// \param image
-/// \param x
-/// \param y
-///
-void effect::addSprite(QImage image, int x, int y)
-{
-    const uchar* imageData = image.bits();
-    Sprite sprite;
-    sprite.spriteTexture.loadFromMemory(imageData, image.byteCount());
-    sprite.transform.setTexture(sprite.spriteTexture);
-    sprite.texture.create(image.size().width(), image.size().height());
-    sprite.height = y;
-    sprite.width = x;
-    sprite.canvas = new QLabel(_parent);
-    listOfSprites.append(&sprite);
-}
-///
-/// \brief effect::scaleSprites: Change the size of the sprite by x width and y height.
-/// \param x
-/// \param y
-///
-void effect::scaleSprites(int x, int y)
-{
-    for(int i = 0; listOfSprites.length(); i++){
-        listOfSprites[i]->width = x;
-        listOfSprites[i]->height = y;
+void effect::addSprite(QVector<sf::Texture> images, int x, int y, QWidget *parent){
+    for(int i = 0; i < images.length(); i++){
+        sf::Sprite s;
+        //create sprite struct
+        sprite_info sprite;
+        sprite.transform = s;
+        sprite.xMovement = x;
+        sprite.yMovement = y;
+        sprite.transform.setOrigin(22.0f, 22.0f);
+        sprite.transform.setPosition(22.0f, 22.0f);
+        sprite.texture = images[i];
+        sprite.canvas = new QLabel(parent);
+        sprites.append(sprite);
     }
+    renderTexture.create(44, 44);
 }
 ///
-/// \brief effect::setEffect: set the desired predefined effect and FPS.
-/// \param FPS
-/// \param effectType
+/// \brief effect::moveEffect: move the effect sprite by sprite.
+/// \param index
+/// \param rotation
 ///
-void effect::setTypeOfEffect(int FPS, int effectType){
-    Effect thisEffect;
-    thisEffect.FPS = FPS;
-    thisEffect.typeOfEffect = effectType;
+void effect::moveEffect(int index, float rotation, int x, int y){
+    //qDebug() << rotation;
+    sprites[index].canvas->setGeometry(x, y, 60, 60);
+    sprites[index].transform.setTexture(sprites[index].texture);
+    sprites[index].transform.setRotation(rotation);
+    renderTexture.draw(sprites[index].transform);
+    renderTexture.display();
+
+    sf::Image image = renderTexture.getTexture().copyToImage();
+    QImage sprite(image.getPixelsPtr(), 44, 44, QImage::Format_ARGB32);
+    sprite = sprite.rgbSwapped();
+    sprite = sprite.scaled(sprites[index].canvas->size(), Qt::IgnoreAspectRatio);
+    sprites[index].canvas->setPixmap(QPixmap::fromImage(sprite));
+    sprites[index].canvas->show();
 }
-
-void effect::updateEffect()
-{
-
+///
+/// \brief effect::getImage
+/// \param index
+/// \return sf::Image
+///
+sf::Image effect::getImage(int index){
+    return sprites[index].transform.getTexture()->copyToImage();
 }
