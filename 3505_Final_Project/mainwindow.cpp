@@ -1,13 +1,16 @@
 #include "mainwindow.h"
 #include "difficultyselector.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 #include <QKeyEvent>
 #include <iostream>
 #include "pathfinder.h"
 #include <QString>
+#include "effect.h"
 
 void testPathfind(int, int);
-
+b2Vec2 gravity(0.0f, 6.0f);
+b2World world(gravity);
 // Constructor for main window
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,6 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //Create effects physics
+    scale = 80/1.5;
+    createGround(world, 600, 150);
     // parse and archive questions from questions.txt
     qManager = new QuestionManager;
 
@@ -162,6 +168,12 @@ void MainWindow::updateHealth(QString health)
 // this is an event handler for Key Presses
 void MainWindow::keyPressEvent(QKeyEvent *KeyEvent)
 {
+
+
+    //fx->addEffect(images, "bob", 1, ui->PlayerLabel->x(), ui->PlayerLabel->y());
+    emit fireEffect("bob");
+
+
     // first check if the event is the result of someone holding down a key. If it is,
     // ignore the event because we do not care.
     if (KeyEvent->isAutoRepeat())
@@ -253,7 +265,7 @@ void MainWindow::on_SubmitAnswerButton_clicked()
     ui->ParchmentLabel->hide();
     ui->ParchmentTextLabel->hide();
     ui->AnswerLineEdit->hide();
-
+    makeExplodingGoblin(800, 400);
     // get the answer out of the Answer Line Edit and send it to the model and clear it
     QString answer = ui->AnswerLineEdit->text();
     emit answerSubmitted(answer.toInt());
@@ -261,4 +273,73 @@ void MainWindow::on_SubmitAnswerButton_clicked()
 
     // give focus back to central widget
     ui->centralWidget->setFocus();
+}
+
+void MainWindow::updateWorld(){
+int BodyCount = 0;
+world.Step(1/30.0f, 8, 3);
+for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
+    {
+        if (BodyIterator->GetType() == b2_dynamicBody)
+        {
+            //For sprite background transform
+            _effect->moveEffect(BodyCount, BodyIterator->GetAngle() * 180/b2_pi, scale * BodyIterator->GetPosition().x, scale * BodyIterator->GetPosition().y);
+            ++BodyCount;
+        }
+    }
+}
+
+void MainWindow::createGround(b2World &world, float posX, float posY)
+{
+    b2BodyDef BodyDef;
+    BodyDef.position = b2Vec2(800/scale, 400/scale);
+    BodyDef.type = b2_staticBody;
+    b2Body* Body = world.CreateBody(&BodyDef);
+    b2PolygonShape Shape;
+    Shape.SetAsBox((1000.0f/2)/scale, (80.0f/2)/scale); // Creates a box shape. Divide your desired width and height by 2.
+    b2FixtureDef FixtureDef;
+    FixtureDef.density = 0.f;  // Sets the density of the body
+    FixtureDef.shape = &Shape; // Sets the shape
+    Body->CreateFixture(&FixtureDef); // Apply the fixture definition
+}
+
+void MainWindow::michaelBay()
+{
+    //Game loop 30fps
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::updateWorld);
+    timer->start(33);
+}
+
+void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
+    //add goblin to effect
+    effect* boom = new effect();
+    if(body.loadFromFile("../Assets/BODY.png")){}
+    if(hand.loadFromFile("../Assets/HAND.png")){}
+    QVector<sf::Texture> imagePTRs;
+    for(int i = 0; i < 7; i++){
+        if(i < 2){
+            imagePTRs.append(body);
+        }
+        else{
+            imagePTRs.append(hand);
+        }
+        //Make bodies
+        b2BodyDef BodyDef;
+        BodyDef.position = b2Vec2(goblinY/scale, goblinY/scale); //need to scale the pixel positions to real world positions. World is in meters
+        BodyDef.type = b2_dynamicBody;
+        b2Body* Body = world.CreateBody(&BodyDef);
+        if(i > 2 && i > 4) {Body->ApplyLinearImpulse(b2Vec2(0, -10), Body->GetWorldCenter(), true);}
+        b2PolygonShape Shape;
+        Shape.SetAsBox((44.0f)/scale, (44.0f)/scale);
+        b2FixtureDef FixtureDef;
+        FixtureDef.density = 1.f;
+        FixtureDef.friction = 0.8f;
+        FixtureDef.shape = &Shape;
+        Body->CreateFixture(&FixtureDef);
+    }
+    _effect = boom;
+    boom->addSprite(imagePTRs, goblinX, goblinY, this);
+    michaelBay();
+
 }
