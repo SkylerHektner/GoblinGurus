@@ -27,6 +27,7 @@ void effect::addSprite(QVector<sf::Texture> images, int x, int y, QWidget *paren
 ///
 void effect::moveEffect(int index, float rotation, int x, int y){
     //qDebug() << rotation;
+    renderTexture.clear(sf::Color::Transparent);
     sprites[index].canvas->setGeometry(x, y, 60, 60);
     sprites[index].transform.setTexture(sprites[index].texture);
     sprites[index].transform.setRotation(rotation);

@@ -162,6 +162,8 @@ void GameController::answerReceived(int answer)
             std::cout << goblinVector->size() << std::endl;
             if (goblinVector->at(i)->answer == answer)
             {
+                // explode some goblins
+                emit michaelBay(goblinVector->at(i)->posX, goblinVector->at(i)->posY);
                 // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
                 delete goblinVector->at(i);
                 if(goblinVector->size() == 1)
