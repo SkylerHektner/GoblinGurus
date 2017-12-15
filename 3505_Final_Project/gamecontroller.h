@@ -2,6 +2,10 @@
 #define GAMECONTROLLER_H
 #include <QObject>
 #include "goblin.h"
+#include "questionmanager.h"
+#include <QTimer>
+#include "pathfinder.h"
+#include <QMediaPlayer>
 
 /*
  * This class is the primary model object for the game. It ultimately is responsible for interfacing with the view.
@@ -18,24 +22,43 @@ public:
     void loadMapImage();
     void loadPlayerImage();
     void loadGoblinImages();
+    int diff;
+    void startGame();
 
 signals:
     void changeMapImageRequest(QImage * image);
     void changePlayerImageRequest(QImage * image, int x, int y);
+    void showParchment(QString QuestionText, bool takeAnswer, QImage * image);
+    void updateHealth(QString health);
+    void michaelBay(int, int);
 
     // in the two below methods, i refers to the index of the goblin we want to act on
     void changeGoblinImageRequest(QImage * image, int x, int y, int i);
     void killGoblin(int i);
 
-    void showParchment(QString QuestionText, bool takeAnswer, QImage * image);
-
 public slots:
     void moveRequested(std::string movement);
+    void answerReceived(int answer);
+
+    // used by an internal QTimer to tick the goblin AI
+    void tickGoblinAI();
 
 private:
+
+    int goblinAttackDamage = 10;
+    // player attack: OP AS FUUUUUCCCKKKKK
+
     // variables to keep track of the current game state
     int PlayerPosX = 0;
     int PlayerPosY = 0;
+    int oldPosX = 0;
+    int oldPosY = 0;
+
+    // current level, starts at level 1
+    int level = 1;
+
+    // player health
+    int playerHealth = 100;
 
     // the QImage we use to store the map
     QImage * mapImage;
@@ -47,6 +70,7 @@ private:
     QImage * playerSprite_l;
     QImage * playerSprite_r;
     char lastMoveDirection = 'f'; // tells us what playerImage to send to the view. Assigned during movement
+    bool moveAllowed = true; // used to determine if the player is allowed to move currently
     // the size of the grid in pixels and it's total number of grid units in x and z
     int gridRatio = 80;
     int maxGridSizeY = 9;
@@ -59,8 +83,33 @@ private:
     // a vector of the goblins on the map
     std::vector<goblin*> * goblinVector = new std::vector<goblin*>();
 
+    // the question manager
+    QuestionManager * questionManager = new QuestionManager();
+
+    // the QTimer responsible for ticking the goblin AI
+    QTimer * goblinTimer = new QTimer(this);
+    // The int reponsible for tracking current goblin inbetween AI ticks
+    int curGoblinAIIndex = 0;
+    // the bool that tells the goblin tick whether or not to pathfind
+    bool moveGoblins = false;
+    // the pathfinder that is used to move the goblins
+    Pathfinder *goblinAI;
+
+    // vairables to keep track of turns
+    int playerMoveCounter = 0;
+    int goblinMoveCounter = 0;
+
+    // the media player we use to play game music
+    QMediaPlayer * musicPlayer;
+
     // the method called to emit a signal for the view to move the player
     void movePlayer(std::string movement);
+
+    // populates the collision vector with the proper points given the level
+    void generateLevelCollisionPoints();
+    // populates the goblins vector with the proper goblins given the level
+    void generateGoblins();
+    void generateNextLevel();
 };
 
 

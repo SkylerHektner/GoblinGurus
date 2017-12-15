@@ -1,8 +1,20 @@
 #include "mainwindow.h"
+#include "difficultyselector.h"
 #include "ui_mainwindow.h"
+#include <QDebug>
 #include <QKeyEvent>
 #include <iostream>
+#include "pathfinder.h"
+#include <QString>
+#include "effect.h"
 
+void testPathfind(int, int);
+void removeBodies(QVector<b2Body *>);
+bool addToDelete = true;
+void createWalls();
+QVector<b2Body *> bodiesToDestroy;
+b2Vec2 gravity(0.0f, 2.5f);
+b2World world(gravity);
 // Constructor for main window
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,6 +22,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //Create effects physics
+    scale = 30;
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &MainWindow::updateWorld);
+    timer->start(33);
+    //create the sprite (effect) class
+    _effect = new effect();
     // parse and archive questions from questions.txt
     qManager = new QuestionManager;
 
@@ -32,21 +51,29 @@ MainWindow::MainWindow(QWidget *parent) :
     // ensure answer button is hidden
     ui->SubmitAnswerButton->hide();
 
+    ui->Health->move(60,20);
+
     // CONNECTIONS
     connect(controller, SIGNAL(changeMapImageRequest(QImage*)), this, SLOT(changeMapImage(QImage*)));
     connect(controller, SIGNAL(changePlayerImageRequest(QImage*,int,int)), this, SLOT(changePlayerImage(QImage*,int,int)));
     connect(this, SIGNAL(moveRequested(std::string)), controller, SLOT(moveRequested(std::string)));
+    connect(controller, SIGNAL(showParchment(QString,bool,QImage*)), this, SLOT(showParchment(QString,bool,QImage*)));
+    connect(controller, SIGNAL(updateHealth(QString)), this, SLOT(updateHealth(QString)));
     connect(controller, SIGNAL(changeGoblinImageRequest(QImage*,int,int,int)), this, SLOT(changeGoblinImage(QImage*,int,int,int)));
     connect(controller, SIGNAL(killGoblin(int)), this, SLOT(killGoblin(int)));
-    connect(controller, SIGNAL(showParchment(QString,bool,QImage*)), this, SLOT(showParchment(QString,bool,QImage*)));
+    connect(this, SIGNAL(answerSubmitted(int)), controller, SLOT(answerReceived(int)));
+    connect(controller, SIGNAL(michaelBay(int,int)), this, SLOT(michaelBay(int,int)));
 
+    difficultyselector * selector = new difficultyselector;
+    connect(selector, SIGNAL(playGame(int)), this, SLOT(startGame(int)));
+    selector->setModal(true);
+    selector->exec();
+}
 
-    // tell the controller to load the map
-    controller->loadMapImage();
-    // move the player to their start position
-    controller->loadPlayerImage();
-    // load any goblins in the scene
-    controller->loadGoblinImages();
+void MainWindow::startGame(int difficulty)
+{
+    controller->diff = difficulty;
+    controller->startGame();
 }
 
 // destructor for main window
@@ -63,7 +90,7 @@ void MainWindow::changeMapImage(QImage *newImage)
     ui->MapLabel->setMinimumSize(newImage->size());
     ui->MapLabel->setPixmap(QPixmap::fromImage(*newImage));
     ui->MapLabel->show();
-    ui->centralWidget->setMinimumSize(newImage->size() + QSize(40, 0));
+    ui->centralWidget->setMinimumSize(newImage->size() + QSize(0, 0));
 }
 // the slot used to change the image and location of the image of the player on the screen
 void MainWindow::changePlayerImage(QImage *image, int x, int y)
@@ -73,6 +100,7 @@ void MainWindow::changePlayerImage(QImage *image, int x, int y)
     ui->PlayerLabel->setPixmap(QPixmap::fromImage(*image));
     ui->PlayerLabel->move(x, y);
     ui->PlayerLabel->show();
+    //testPathfind((x-20)/80, (y-20)/80);
 }
 
 // the slot used to change the image and location of the image of a goblin on the screen
@@ -88,7 +116,8 @@ void MainWindow::changeGoblinImage(QImage *image, int x, int y, int i)
 // the slot that will remove the goblins label from the goblinLabelVector
 void MainWindow::killGoblin(int i)
 {
-    //goblinLabelVector->pop_back();
+    goblinLabelVector->at(i)->setPixmap(QPixmap());
+    goblinLabelVector->at(i)->show();
 }
 
 // the slot used by the model to cause the parchment page to display
@@ -120,10 +149,11 @@ void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * 
 
     // set the parchment text we want to display and set its size
     ui->ParchmentTextLabel->setText(textToDisplay);
-    ui->ParchmentTextLabel->setMinimumSize(parchmentImage->size()/2);
+    ui->ParchmentTextLabel->setMinimumSize(parchmentImage->size()/4);
+    ui->ParchmentTextLabel->setMaximumSize(parchmentImage->size()/4);
 
     // move all the widgets to the center of the screen formatted correctly
-    ui->ParchmentLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY - ui->ParchmentLabel->size().height()/2 + 20);
+    ui->ParchmentLabel->move(centerX - ui->ParchmentLabel->size().width()/2, centerY - ui->ParchmentLabel->size().height()/2);
     ui->ParchmentTextLabel->move(centerX - ui->ParchmentTextLabel->size().width()/2, centerY*.6);
     ui->SubmitAnswerButton->move(centerX - ui->SubmitAnswerButton->size().width()/2, centerY * 1.4);
 
@@ -134,6 +164,13 @@ void MainWindow::showParchment(QString textToDisplay, bool takeAnswer, QImage * 
 
     // set focus on the submit answer button to make sure the player cannot move
     ui->SubmitAnswerButton->setFocus();
+}
+
+void MainWindow::updateHealth(QString health)
+{
+    ui->Health->setText(QString("Health: ") + health);
+    ui->Health->move(60,20);
+    ui->Health->show();
 }
 
 // QT GENERATED SLOTS - FROM VIEW
@@ -172,6 +209,57 @@ void MainWindow::keyPressEvent(QKeyEvent *KeyEvent)
     }
 }
 
+void testPathfind(int x, int y) {
+    std::vector<std::pair<int, int>> collisionPoints;
+
+    // create border points
+    for(int i = 0; i < 16; i++)
+    {
+        collisionPoints.push_back(std::pair<int, int>(i, 0));
+        collisionPoints.push_back(std::pair<int, int>(i, 9));
+    }
+    for(int i = 0; i < 10; i++)
+    {
+        collisionPoints.push_back(std::pair<int, int>(0, i));
+        collisionPoints.push_back(std::pair<int, int>(15, i));
+    }
+
+    // define level 1 inner walls
+    collisionPoints.push_back(std::pair<int, int>(1, 4));
+    collisionPoints.push_back(std::pair<int, int>(1, 5));
+    collisionPoints.push_back(std::pair<int, int>(3, 4));
+    collisionPoints.push_back(std::pair<int, int>(3, 5));
+    collisionPoints.push_back(std::pair<int, int>(4, 4));
+    collisionPoints.push_back(std::pair<int, int>(4, 5));
+    collisionPoints.push_back(std::pair<int, int>(6, 4));
+    collisionPoints.push_back(std::pair<int, int>(6, 5));
+    collisionPoints.push_back(std::pair<int, int>(7, 1));
+    collisionPoints.push_back(std::pair<int, int>(7, 3));
+    collisionPoints.push_back(std::pair<int, int>(7, 4));
+    collisionPoints.push_back(std::pair<int, int>(7, 5));
+    collisionPoints.push_back(std::pair<int, int>(7, 6));
+    collisionPoints.push_back(std::pair<int, int>(7, 7));
+    collisionPoints.push_back(std::pair<int, int>(7, 8));
+    collisionPoints.push_back(std::pair<int, int>(10, 3));
+    collisionPoints.push_back(std::pair<int, int>(10, 6));
+    collisionPoints.push_back(std::pair<int, int>(11, 2));
+    collisionPoints.push_back(std::pair<int, int>(11, 3));
+    collisionPoints.push_back(std::pair<int, int>(11, 6));
+    collisionPoints.push_back(std::pair<int, int>(11, 7));
+    collisionPoints.push_back(std::pair<int, int>(12, 3));
+    collisionPoints.push_back(std::pair<int, int>(12, 6));
+
+    Pathfinder pathfinder(collisionPoints, 10, 16);
+
+    std::vector<std::pair<int, int>> enemies;
+    enemies.push_back(std::pair<int, int>(9, 2));
+
+    std::pair<int, int> playerPosition(x, y);
+    pathfinder.findPath(enemies, 0, 4, 0, 1, playerPosition);
+}
+
+
+
 // event handler for when the submit answer button is clicked
 void MainWindow::on_SubmitAnswerButton_clicked()
 {
@@ -180,7 +268,6 @@ void MainWindow::on_SubmitAnswerButton_clicked()
     ui->ParchmentLabel->hide();
     ui->ParchmentTextLabel->hide();
     ui->AnswerLineEdit->hide();
-
     // get the answer out of the Answer Line Edit and send it to the model and clear it
     QString answer = ui->AnswerLineEdit->text();
     emit answerSubmitted(answer.toInt());
@@ -188,4 +275,78 @@ void MainWindow::on_SubmitAnswerButton_clicked()
 
     // give focus back to central widget
     ui->centralWidget->setFocus();
+}
+
+void MainWindow::updateWorld(){
+int BodyCount = 0;
+bool deleteBodies = false;
+world.Step(1/30.0f, 8, 3);
+for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
+    {
+        if (BodyIterator->GetType() == b2_dynamicBody)
+        {
+            //remvoe the body if it is off screen.
+            if((scale * BodyIterator->GetPosition().y) > 2000 && addToDelete){
+                int count = 0;
+                for(b2Body* b = world.GetBodyList(); b != 0; b = b->GetNext()){
+                    b2Body * bodies = &BodyIterator[count];
+                    bodiesToDestroy.push_front(bodies);
+                    count++;
+                    qDebug() << bodiesToDestroy.size();
+                    addToDelete = false;
+                    deleteBodies = true;
+                }
+
+            }
+            //For sprite background transform.
+            _effect->moveEffect(BodyCount, BodyIterator->GetAngle() * 180/b2_pi, scale * BodyIterator->GetPosition().x, scale * BodyIterator->GetPosition().y);
+            ++BodyCount;
+        }
+        qDebug() << world.GetBodyCount();
+    }
+    if(deleteBodies){removeBodies(bodiesToDestroy);}
+}
+
+void MainWindow::michaelBay(int x, int y)
+{
+    world.ClearForces();
+    makeExplodingGoblin(x, y);
+}
+
+void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
+    //add goblin to effect
+    float boxSize = 10.0f; //size of the box depending on the asset loaded
+    if(body.loadFromFile("../Assets/BODY.png")){}
+    if(hand.loadFromFile("../Assets/HAND.png")){}
+    QVector<sf::Texture> imagePTRs;
+    for(int i = 0; i < 15; i++){
+        if(i < 5){
+            imagePTRs.append(body);
+            boxSize = body.getSize().x;
+        }
+        else{
+            imagePTRs.append(hand);
+            boxSize = body.getSize().x;
+        }
+        //Make bodies
+        b2BodyDef BodyDef;
+        BodyDef.position = b2Vec2(goblinX/scale, goblinY/scale); //need to scale the pixel positions to real world positions. World is in meters
+        BodyDef.type = b2_dynamicBody;
+        b2Body* Body = world.CreateBody(&BodyDef);
+        if(true) {Body->ApplyLinearImpulse(b2Vec2( qrand()%3,  -qrand()%3), Body->GetWorldCenter(), true);}
+        b2PolygonShape Shape;
+        Shape.SetAsBox((boxSize/2)/scale, (boxSize/2)/scale);
+        b2FixtureDef FixtureDef;
+        FixtureDef.density = 1.f;
+        FixtureDef.friction = 0.7f;
+        FixtureDef.shape = &Shape;
+        Body->CreateFixture(&FixtureDef);
+    }
+    _effect->addSprite(imagePTRs, this);
+}
+
+void removeBodies(QVector<b2Body *> bodies){
+//    for(int i = 0; i < bodies.length(); i++)
+//        world.DestroyBody(bodies[i]);
+//    addToDelete = false;
 }

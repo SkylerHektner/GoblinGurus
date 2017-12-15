@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.9.1. It"
+#error "This file was generated using the moc from 5.9.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[22];
-    char stringdata0[245];
+    QByteArrayData data[26];
+    char stringdata0[286];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -52,7 +52,11 @@ QT_MOC_LITERAL(17, 161, 13), // "showParchment"
 QT_MOC_LITERAL(18, 175, 13), // "textToDisplay"
 QT_MOC_LITERAL(19, 189, 10), // "takeAnswer"
 QT_MOC_LITERAL(20, 200, 14), // "parchmentImage"
-QT_MOC_LITERAL(21, 215, 29) // "on_SubmitAnswerButton_clicked"
+QT_MOC_LITERAL(21, 215, 12), // "updateHealth"
+QT_MOC_LITERAL(22, 228, 6), // "health"
+QT_MOC_LITERAL(23, 235, 9), // "startGame"
+QT_MOC_LITERAL(24, 245, 10), // "difficulty"
+QT_MOC_LITERAL(25, 256, 29) // "on_SubmitAnswerButton_clicked"
 
     },
     "MainWindow\0moveRequested\0\0std::string\0"
@@ -61,7 +65,8 @@ QT_MOC_LITERAL(21, 215, 29) // "on_SubmitAnswerButton_clicked"
     "changePlayerImage\0image\0x\0y\0"
     "changeGoblinImage\0i\0killGoblin\0"
     "showParchment\0textToDisplay\0takeAnswer\0"
-    "parchmentImage\0on_SubmitAnswerButton_clicked"
+    "parchmentImage\0updateHealth\0health\0"
+    "startGame\0difficulty\0on_SubmitAnswerButton_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -71,7 +76,7 @@ static const uint qt_meta_data_MainWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -79,16 +84,18 @@ static const uint qt_meta_data_MainWindow[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   54,    2, 0x06 /* Public */,
-       5,    1,   57,    2, 0x06 /* Public */,
+       1,    1,   64,    2, 0x06 /* Public */,
+       5,    1,   67,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    1,   60,    2, 0x0a /* Public */,
-      10,    3,   63,    2, 0x0a /* Public */,
-      14,    4,   70,    2, 0x0a /* Public */,
-      16,    1,   79,    2, 0x0a /* Public */,
-      17,    3,   82,    2, 0x0a /* Public */,
-      21,    0,   89,    2, 0x08 /* Private */,
+       7,    1,   70,    2, 0x0a /* Public */,
+      10,    3,   73,    2, 0x0a /* Public */,
+      14,    4,   80,    2, 0x0a /* Public */,
+      16,    1,   89,    2, 0x0a /* Public */,
+      17,    3,   92,    2, 0x0a /* Public */,
+      21,    1,   99,    2, 0x0a /* Public */,
+      23,    1,  102,    2, 0x0a /* Public */,
+      25,    0,  105,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
@@ -100,6 +107,8 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void, 0x80000000 | 8, QMetaType::Int, QMetaType::Int, QMetaType::Int,   11,   12,   13,   15,
     QMetaType::Void, QMetaType::Int,   15,
     QMetaType::Void, QMetaType::QString, QMetaType::Bool, 0x80000000 | 8,   18,   19,   20,
+    QMetaType::Void, QMetaType::QString,   22,
+    QMetaType::Void, QMetaType::Int,   24,
     QMetaType::Void,
 
        0        // eod
@@ -118,7 +127,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 4: _t->changeGoblinImage((*reinterpret_cast< QImage*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
         case 5: _t->killGoblin((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 6: _t->showParchment((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2])),(*reinterpret_cast< QImage*(*)>(_a[3]))); break;
-        case 7: _t->on_SubmitAnswerButton_clicked(); break;
+        case 7: _t->updateHealth((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 8: _t->startGame((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 9: _t->on_SubmitAnswerButton_clicked(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -156,7 +167,7 @@ void *MainWindow::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_MainWindow.stringdata0))
-        return static_cast<void*>(const_cast< MainWindow*>(this));
+        return static_cast<void*>(this);
     return QMainWindow::qt_metacast(_clname);
 }
 
@@ -166,13 +177,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 10)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 10;
     }
     return _id;
 }

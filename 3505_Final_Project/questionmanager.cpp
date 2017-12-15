@@ -72,17 +72,19 @@ void QuestionManager::ParseQuestion(std::string line)
     answer = std::stoi(itemGroup.at(0));
     tier = std::stoi(itemGroup.at(1)) - 1;
 
+    Question question(answer, tier, itemGroup.at(2), itemGroup.at(3), itemGroup.at(4), itemGroup.at(5));
+
     // add question to the proper question tier vector
-    Question question(answer, tier, itemGroup.at(2));
     questions.at(tier).push_back(question);
 }
 
 // returns a random question from the requested tier
 Question QuestionManager::GetQuestion(int tier)
 {
-    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count() + questionCount*10000;
     std::default_random_engine generator(seed);
     std::uniform_int_distribution<int> distribution(0,questions.at(tier).size()-1);
+    questionCount++;
 
     return questions.at(tier).at(distribution(generator));
 }

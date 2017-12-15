@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'gamecontroller.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.9.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'gamecontroller.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.9.1. It"
+#error "This file was generated using the moc from 5.9.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_GameController_t {
-    QByteArrayData data[17];
-    char stringdata0[192];
+    QByteArrayData data[22];
+    char stringdata0[247];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,23 +39,29 @@ QT_MOC_LITERAL(4, 46, 5), // "image"
 QT_MOC_LITERAL(5, 52, 24), // "changePlayerImageRequest"
 QT_MOC_LITERAL(6, 77, 1), // "x"
 QT_MOC_LITERAL(7, 79, 1), // "y"
-QT_MOC_LITERAL(8, 81, 24), // "changeGoblinImageRequest"
-QT_MOC_LITERAL(9, 106, 1), // "i"
-QT_MOC_LITERAL(10, 108, 10), // "killGoblin"
-QT_MOC_LITERAL(11, 119, 13), // "showParchment"
-QT_MOC_LITERAL(12, 133, 12), // "QuestionText"
-QT_MOC_LITERAL(13, 146, 10), // "takeAnswer"
-QT_MOC_LITERAL(14, 157, 13), // "moveRequested"
-QT_MOC_LITERAL(15, 171, 11), // "std::string"
-QT_MOC_LITERAL(16, 183, 8) // "movement"
+QT_MOC_LITERAL(8, 81, 13), // "showParchment"
+QT_MOC_LITERAL(9, 95, 12), // "QuestionText"
+QT_MOC_LITERAL(10, 108, 10), // "takeAnswer"
+QT_MOC_LITERAL(11, 119, 12), // "updateHealth"
+QT_MOC_LITERAL(12, 132, 6), // "health"
+QT_MOC_LITERAL(13, 139, 24), // "changeGoblinImageRequest"
+QT_MOC_LITERAL(14, 164, 1), // "i"
+QT_MOC_LITERAL(15, 166, 10), // "killGoblin"
+QT_MOC_LITERAL(16, 177, 13), // "moveRequested"
+QT_MOC_LITERAL(17, 191, 11), // "std::string"
+QT_MOC_LITERAL(18, 203, 8), // "movement"
+QT_MOC_LITERAL(19, 212, 14), // "answerReceived"
+QT_MOC_LITERAL(20, 227, 6), // "answer"
+QT_MOC_LITERAL(21, 234, 12) // "tickGoblinAI"
 
     },
     "GameController\0changeMapImageRequest\0"
     "\0QImage*\0image\0changePlayerImageRequest\0"
-    "x\0y\0changeGoblinImageRequest\0i\0"
-    "killGoblin\0showParchment\0QuestionText\0"
-    "takeAnswer\0moveRequested\0std::string\0"
-    "movement"
+    "x\0y\0showParchment\0QuestionText\0"
+    "takeAnswer\0updateHealth\0health\0"
+    "changeGoblinImageRequest\0i\0killGoblin\0"
+    "moveRequested\0std::string\0movement\0"
+    "answerReceived\0answer\0tickGoblinAI"
 };
 #undef QT_MOC_LITERAL
 
@@ -65,32 +71,38 @@ static const uint qt_meta_data_GameController[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       5,       // signalCount
+       6,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   44,    2, 0x06 /* Public */,
-       5,    3,   47,    2, 0x06 /* Public */,
-       8,    4,   54,    2, 0x06 /* Public */,
-      10,    1,   63,    2, 0x06 /* Public */,
-      11,    3,   66,    2, 0x06 /* Public */,
+       1,    1,   59,    2, 0x06 /* Public */,
+       5,    3,   62,    2, 0x06 /* Public */,
+       8,    3,   69,    2, 0x06 /* Public */,
+      11,    1,   76,    2, 0x06 /* Public */,
+      13,    4,   79,    2, 0x06 /* Public */,
+      15,    1,   88,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      14,    1,   73,    2, 0x0a /* Public */,
+      16,    1,   91,    2, 0x0a /* Public */,
+      19,    1,   94,    2, 0x0a /* Public */,
+      21,    0,   97,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, 0x80000000 | 3,    4,
     QMetaType::Void, 0x80000000 | 3, QMetaType::Int, QMetaType::Int,    4,    6,    7,
-    QMetaType::Void, 0x80000000 | 3, QMetaType::Int, QMetaType::Int, QMetaType::Int,    4,    6,    7,    9,
-    QMetaType::Void, QMetaType::Int,    9,
-    QMetaType::Void, QMetaType::QString, QMetaType::Bool, 0x80000000 | 3,   12,   13,    4,
+    QMetaType::Void, QMetaType::QString, QMetaType::Bool, 0x80000000 | 3,    9,   10,    4,
+    QMetaType::Void, QMetaType::QString,   12,
+    QMetaType::Void, 0x80000000 | 3, QMetaType::Int, QMetaType::Int, QMetaType::Int,    4,    6,    7,   14,
+    QMetaType::Void, QMetaType::Int,   14,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 15,   16,
+    QMetaType::Void, 0x80000000 | 17,   18,
+    QMetaType::Void, QMetaType::Int,   20,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -103,10 +115,13 @@ void GameController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         switch (_id) {
         case 0: _t->changeMapImageRequest((*reinterpret_cast< QImage*(*)>(_a[1]))); break;
         case 1: _t->changePlayerImageRequest((*reinterpret_cast< QImage*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
-        case 2: _t->changeGoblinImageRequest((*reinterpret_cast< QImage*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
-        case 3: _t->killGoblin((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->showParchment((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2])),(*reinterpret_cast< QImage*(*)>(_a[3]))); break;
-        case 5: _t->moveRequested((*reinterpret_cast< std::string(*)>(_a[1]))); break;
+        case 2: _t->showParchment((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2])),(*reinterpret_cast< QImage*(*)>(_a[3]))); break;
+        case 3: _t->updateHealth((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 4: _t->changeGoblinImageRequest((*reinterpret_cast< QImage*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
+        case 5: _t->killGoblin((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->moveRequested((*reinterpret_cast< std::string(*)>(_a[1]))); break;
+        case 7: _t->answerReceived((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: _t->tickGoblinAI(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -127,23 +142,30 @@ void GameController::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
             }
         }
         {
+            typedef void (GameController::*_t)(QString , bool , QImage * );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GameController::showParchment)) {
+                *result = 2;
+                return;
+            }
+        }
+        {
+            typedef void (GameController::*_t)(QString );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GameController::updateHealth)) {
+                *result = 3;
+                return;
+            }
+        }
+        {
             typedef void (GameController::*_t)(QImage * , int , int , int );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GameController::changeGoblinImageRequest)) {
-                *result = 2;
+                *result = 4;
                 return;
             }
         }
         {
             typedef void (GameController::*_t)(int );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GameController::killGoblin)) {
-                *result = 3;
-                return;
-            }
-        }
-        {
-            typedef void (GameController::*_t)(QString , bool , QImage * );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GameController::showParchment)) {
-                *result = 4;
+                *result = 5;
                 return;
             }
         }
@@ -165,7 +187,7 @@ void *GameController::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
     if (!strcmp(_clname, qt_meta_stringdata_GameController.stringdata0))
-        return static_cast<void*>(const_cast< GameController*>(this));
+        return static_cast<void*>(this);
     return QObject::qt_metacast(_clname);
 }
 
@@ -175,13 +197,13 @@ int GameController::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 9;
     }
     return _id;
 }
@@ -201,24 +223,31 @@ void GameController::changePlayerImageRequest(QImage * _t1, int _t2, int _t3)
 }
 
 // SIGNAL 2
-void GameController::changeGoblinImageRequest(QImage * _t1, int _t2, int _t3, int _t4)
+void GameController::showParchment(QString _t1, bool _t2, QImage * _t3)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
-void GameController::killGoblin(int _t1)
+void GameController::updateHealth(QString _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
 }
 
 // SIGNAL 4
-void GameController::showParchment(QString _t1, bool _t2, QImage * _t3)
+void GameController::changeGoblinImageRequest(QImage * _t1, int _t2, int _t3, int _t4)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)) };
     QMetaObject::activate(this, &staticMetaObject, 4, _a);
+}
+
+// SIGNAL 5
+void GameController::killGoblin(int _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

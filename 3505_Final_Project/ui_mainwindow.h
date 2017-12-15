@@ -17,7 +17,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
@@ -39,14 +38,22 @@ public:
     QLabel *ParchmentTextLabel;
     QLineEdit *AnswerLineEdit;
     QPushButton *SubmitAnswerButton;
-    QMenuBar *menuBar;
+    QLabel *Health;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(400, 300);
+        MainWindow->resize(1360, 880);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
+        MainWindow->setSizePolicy(sizePolicy);
+        MainWindow->setMinimumSize(QSize(1360, 880));
+        MainWindow->setMaximumSize(QSize(1360, 880));
+        MainWindow->setStyleSheet(QStringLiteral("QMainWindow { background: rgb(0, 0, 0)}"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         MapLabel = new QLabel(centralWidget);
@@ -84,11 +91,16 @@ public:
         SubmitAnswerButton = new QPushButton(centralWidget);
         SubmitAnswerButton->setObjectName(QStringLiteral("SubmitAnswerButton"));
         SubmitAnswerButton->setGeometry(QRect(272, 100, 121, 28));
+        Health = new QLabel(centralWidget);
+        Health->setObjectName(QStringLiteral("Health"));
+        Health->setGeometry(QRect(250, 10, 81, 16));
+        QFont font;
+        font.setPointSize(10);
+        font.setBold(true);
+        font.setWeight(75);
+        Health->setFont(font);
+        Health->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
         MainWindow->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 400, 20));
-        MainWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
@@ -100,7 +112,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Goblin Gurus", Q_NULLPTR));
         MapLabel->setText(QString());
         PlayerLabel->setText(QString());
         GoblinLabel1->setText(QString());
@@ -112,6 +124,7 @@ public:
         ParchmentTextLabel->setText(QApplication::translate("MainWindow", "TextLabel", Q_NULLPTR));
         AnswerLineEdit->setPlaceholderText(QApplication::translate("MainWindow", "Answer...", Q_NULLPTR));
         SubmitAnswerButton->setText(QApplication::translate("MainWindow", "Submit Answer", Q_NULLPTR));
+        Health->setText(QApplication::translate("MainWindow", "Health:", Q_NULLPTR));
     } // retranslateUi
 
 };

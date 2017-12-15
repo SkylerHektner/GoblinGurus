@@ -1,0 +1,13 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\gamecontroller.o
+./debug\goblin.o
+./debug\questionmanager.o
+./debug\question.o
+./debug\pathfinder.o
+./debug\difficultyselector.o
+./debug\moc_mainwindow.o
+./debug\moc_gamecontroller.o
+./debug\moc_difficultyselector.o
+);
