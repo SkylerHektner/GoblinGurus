@@ -9,6 +9,7 @@
 #include <QString>
 #include <QMediaPlayer>
 #include <QDebug>
+#include <QSound>
 
 // destructor for the Game Controller Class
 GameController::~GameController()
@@ -47,9 +48,12 @@ GameController::GameController(QObject * parent) : QObject(parent)
 
     // play a nice jig
     musicPlayer = new QMediaPlayer;
-    musicPlayer->setMedia(QUrl::fromLocalFile("../Assets/BeepBox-Song.wav"));
+    musicPlayer->setMedia(QUrl::fromLocalFile("/Users/Trevor/Documents/cs3505/cs3505-f17-a8-edu-app-SkylerHektner/Assets/BeepBox-Song.wav"));
     musicPlayer->setVolume(50);
     musicPlayer->play();
+    killSound = new QMediaPlayer();
+    killSound->setMedia(QUrl::fromLocalFile("/Users/Trevor/Documents/cs3505/cs3505-f17-a8-edu-app-SkylerHektner/Assets/boop.wav"));
+    killSound->setVolume(100);
 }
 
 void GameController::startGame()
@@ -227,6 +231,8 @@ void GameController::answerReceived(int answer)
     {
         // explode some goblins
         emit michaelBay(((goblinVector->at(goblinAsking)->posX + 1) * 80) - 40, ((goblinVector->at(goblinAsking)->posY + 1) * 80) - 40);
+        //and some sound
+        killSound->play();
         // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
         delete goblinVector->at(goblinAsking);
         if(goblinVector->size() == 1)

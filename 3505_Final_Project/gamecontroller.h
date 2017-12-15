@@ -101,6 +101,7 @@ private:
 
     // the media player we use to play game music
     QMediaPlayer * musicPlayer;
+    QMediaPlayer * killSound;
 
     // the method called to emit a signal for the view to move the player
     void movePlayer(std::string movement);
