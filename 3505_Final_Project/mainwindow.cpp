@@ -9,9 +9,10 @@
 #include "effect.h"
 
 void testPathfind(int, int);
-void removeBodies(QVector<b2Body> &);
+void removeBodies(QVector<b2Body *>);
+bool addToDelete = true;
 void createWalls();
-QVector<b2Body*> bodiesToDestroy;
+QVector<b2Body *> bodiesToDestroy;
 b2Vec2 gravity(0.0f, 2.5f);
 b2World world(gravity);
 // Constructor for main window
@@ -278,23 +279,32 @@ void MainWindow::on_SubmitAnswerButton_clicked()
 
 void MainWindow::updateWorld(){
 int BodyCount = 0;
+bool deleteBodies = false;
 world.Step(1/30.0f, 8, 3);
 for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
     {
         if (BodyIterator->GetType() == b2_dynamicBody)
         {
             //remvoe the body if it is off screen.
-            if((scale * BodyIterator->GetPosition().y) > 2000){
-                b2Body * bodies = &BodyIterator[BodyCount];
-                bodiesToDestroy.append(bodies);
-                //qDebug() << world.GetBodyCount();
+            if((scale * BodyIterator->GetPosition().y) > 2000 && addToDelete){
+                int count = 0;
+                for(b2Body* b = world.GetBodyList(); b != 0; b = b->GetNext()){
+                    b2Body * bodies = &BodyIterator[count];
+                    bodiesToDestroy.push_front(bodies);
+                    count++;
+                    qDebug() << bodiesToDestroy.size();
+                    addToDelete = false;
+                    deleteBodies = true;
+                }
+
             }
-            //qDebug() << bodiesToDestroy.count();
             //For sprite background transform.
             _effect->moveEffect(BodyCount, BodyIterator->GetAngle() * 180/b2_pi, scale * BodyIterator->GetPosition().x, scale * BodyIterator->GetPosition().y);
             ++BodyCount;
         }
+        qDebug() << world.GetBodyCount();
     }
+    if(deleteBodies){removeBodies(bodiesToDestroy);}
 }
 
 void MainWindow::michaelBay(int x, int y)
@@ -335,6 +345,8 @@ void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
     _effect->addSprite(imagePTRs, this);
 }
 
-void removeBodies(QVector<b2Body> &bodies){
-
+void removeBodies(QVector<b2Body *> bodies){
+//    for(int i = 0; i < bodies.length(); i++)
+//        world.DestroyBody(bodies[i]);
+//    addToDelete = false;
 }
