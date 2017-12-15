@@ -13,18 +13,17 @@ public:
         sf::Sprite transform;
         sf::Texture texture;
         QLabel* canvas;
-        float xMovement;
-        float yMovement;
+        float height;
+        float width;
     }sprite_info;
 
-    void addSprite(QVector<sf::Texture> images, int x, int y, QWidget* parent);
+    void addSprite(QVector<sf::Texture> images, QWidget* parent);
     void moveEffect(int index, float rotation, int x, int y);
     sf::Image getImage(int index);
     void setEffect(int type);
 private:
     QVector<sprite_info> sprites;
-    sf::Texture texture;
-    sf::RenderTexture renderTexture;
+    QVector<sf::RenderTexture *> renderTexture;
 };
 
 #endif // EFFECT_H

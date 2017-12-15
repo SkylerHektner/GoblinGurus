@@ -30,12 +30,11 @@ signals:
     void changePlayerImageRequest(QImage * image, int x, int y);
     void showParchment(QString QuestionText, bool takeAnswer, QImage * image);
     void updateHealth(QString health);
+    void michaelBay(int, int);
 
     // in the two below methods, i refers to the index of the goblin we want to act on
     void changeGoblinImageRequest(QImage * image, int x, int y, int i);
     void killGoblin(int i);
-    // call michaelBay to explode some goblins.
-    void michaelBay(int, int);
 
 public slots:
     void moveRequested(std::string movement);

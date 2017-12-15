@@ -8,6 +8,7 @@
 #include "question.h"
 #include <QString>
 #include <QMediaPlayer>
+#include <QDebug>
 
 // destructor for the Game Controller Class
 GameController::~GameController()
@@ -221,6 +222,9 @@ void GameController::answerReceived(int answer)
     // check if the player answered correct, if they did kill the asking goblin
     if (goblinVector->at(goblinAsking)->answer == answer || answer == 420)
     {
+        qDebug() << ((goblinVector->at(goblinAsking)->posX + 1) * 80) - 40 << " " << ((goblinVector->at(goblinAsking)->posY + 1) * 80) - 40;
+        // explode some goblins
+        emit michaelBay(((goblinVector->at(goblinAsking)->posX + 1) * 80) - 40, ((goblinVector->at(goblinAsking)->posY + 1) * 80) - 40);
         // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
         delete goblinVector->at(goblinAsking);
         if(goblinVector->size() == 1)
