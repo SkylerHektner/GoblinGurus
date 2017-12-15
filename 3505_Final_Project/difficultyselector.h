@@ -21,6 +21,8 @@ public:
 private slots:
     void on_PlayButton_clicked();
 
+    void on_difficultyselector_finished(int result);
+
 private:
     Ui::difficultyselector *ui;
 };
