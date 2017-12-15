@@ -10,7 +10,6 @@
 
 void testPathfind(int, int);
 void removeBodies(b2Body &body);
-bool addToDelete = true;
 void createWalls();
 QVector<b2Body *> bodiesToDestroy;
 b2Vec2 gravity(0.0f, 2.5f);
@@ -23,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Create effects physics
-    scale = 30;
+    scale = 80;
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateWorld);
     timer->start(33);
@@ -292,11 +291,9 @@ for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator
             _effect->moveEffect(BodyCount, BodyIterator->GetAngle() * 180/b2_pi, scale * BodyIterator->GetPosition().x, scale * BodyIterator->GetPosition().y);
             ++BodyCount;
         }
-        qDebug() << world.GetBodyCount();
         //remvoe the body if it is off screen.
-        if((scale * BodyIterator->GetPosition().y) > 3000){
+        if((scale * BodyIterator->GetPosition().y) > 5000){
             removeBodies(*BodyIterator);
-            qDebug() << world.GetBodyCount();
             return;
         }
     }
@@ -327,7 +324,7 @@ void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
         BodyDef.position = b2Vec2(goblinX/scale, goblinY/scale); //need to scale the pixel positions to real world positions. World is in meters
         BodyDef.type = b2_dynamicBody;
         b2Body* Body = world.CreateBody(&BodyDef);
-        if(true) {Body->ApplyLinearImpulse(b2Vec2( qrand()%5,  -qrand()%3), Body->GetWorldCenter(), true);}
+        if(true) {Body->ApplyLinearImpulse(b2Vec2( qrand()%3,  -qrand()%3), Body->GetWorldCenter(), true);}
         b2PolygonShape Shape;
         Shape.SetAsBox((boxSize/2)/scale, (boxSize/2)/scale);
         b2FixtureDef FixtureDef;
@@ -374,7 +371,7 @@ void MainWindow::createWalls(b2World &world){
     BodyDef.type = b2_staticBody;
     b2Body* Body = world.CreateBody(&BodyDef);
     b2PolygonShape Shape;
-    Shape.SetAsBox((40.0f)/scale, (40.0)/scale);
+    Shape.SetAsBox((40.0f)/scale, (80.0)/scale);
     b2FixtureDef FixtureDef;
     FixtureDef.density = 0.f;
     FixtureDef.shape = &Shape;
