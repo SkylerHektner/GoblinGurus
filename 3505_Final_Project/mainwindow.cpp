@@ -9,7 +9,7 @@
 #include "effect.h"
 
 void testPathfind(int, int);
-void removeBodies(QVector<b2Body *>);
+void removeBodies(b2Body &body);
 bool addToDelete = true;
 void createWalls();
 QVector<b2Body *> bodiesToDestroy;
@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(33);
     //create the sprite (effect) class
     _effect = new effect();
+    //create the outer walls
+    createWalls(world);
     // parse and archive questions from questions.txt
     qManager = new QuestionManager;
 
@@ -86,11 +88,13 @@ MainWindow::~MainWindow()
 // the slot used to change the Map Image displayed on the screen
 void MainWindow::changeMapImage(QImage *newImage)
 {
+    //destroyWalls(world);
     ui->MapLabel->setMaximumSize(newImage->size());
     ui->MapLabel->setMinimumSize(newImage->size());
     ui->MapLabel->setPixmap(QPixmap::fromImage(*newImage));
     ui->MapLabel->show();
     ui->centralWidget->setMinimumSize(newImage->size() + QSize(0, 0));
+    createWalls(world);
 }
 // the slot used to change the image and location of the image of the player on the screen
 void MainWindow::changePlayerImage(QImage *image, int x, int y)
@@ -279,37 +283,27 @@ void MainWindow::on_SubmitAnswerButton_clicked()
 
 void MainWindow::updateWorld(){
 int BodyCount = 0;
-bool deleteBodies = false;
 world.Step(1/30.0f, 8, 3);
 for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator = BodyIterator->GetNext())
     {
         if (BodyIterator->GetType() == b2_dynamicBody)
         {
-            //remvoe the body if it is off screen.
-            if((scale * BodyIterator->GetPosition().y) > 2000 && addToDelete){
-                int count = 0;
-                for(b2Body* b = world.GetBodyList(); b != 0; b = b->GetNext()){
-                    b2Body * bodies = &BodyIterator[count];
-                    bodiesToDestroy.push_front(bodies);
-                    count++;
-                    qDebug() << bodiesToDestroy.size();
-                    addToDelete = false;
-                    deleteBodies = true;
-                }
-
-            }
             //For sprite background transform.
             _effect->moveEffect(BodyCount, BodyIterator->GetAngle() * 180/b2_pi, scale * BodyIterator->GetPosition().x, scale * BodyIterator->GetPosition().y);
             ++BodyCount;
         }
         qDebug() << world.GetBodyCount();
+        //remvoe the body if it is off screen.
+        if((scale * BodyIterator->GetPosition().y) > 3000){
+            removeBodies(*BodyIterator);
+            qDebug() << world.GetBodyCount();
+            return;
+        }
     }
-    if(deleteBodies){removeBodies(bodiesToDestroy);}
 }
 
 void MainWindow::michaelBay(int x, int y)
 {
-    world.ClearForces();
     makeExplodingGoblin(x, y);
 }
 
@@ -333,7 +327,7 @@ void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
         BodyDef.position = b2Vec2(goblinX/scale, goblinY/scale); //need to scale the pixel positions to real world positions. World is in meters
         BodyDef.type = b2_dynamicBody;
         b2Body* Body = world.CreateBody(&BodyDef);
-        if(true) {Body->ApplyLinearImpulse(b2Vec2( qrand()%3,  -qrand()%3), Body->GetWorldCenter(), true);}
+        if(true) {Body->ApplyLinearImpulse(b2Vec2( qrand()%5,  -qrand()%3), Body->GetWorldCenter(), true);}
         b2PolygonShape Shape;
         Shape.SetAsBox((boxSize/2)/scale, (boxSize/2)/scale);
         b2FixtureDef FixtureDef;
@@ -345,8 +339,49 @@ void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
     _effect->addSprite(imagePTRs, this);
 }
 
-void removeBodies(QVector<b2Body *> bodies){
-//    for(int i = 0; i < bodies.length(); i++)
-//        world.DestroyBody(bodies[i]);
-//    addToDelete = false;
+void MainWindow::createWalls(b2World &world){
+    //top wall
+    {
+    b2BodyDef BodyDef;
+    BodyDef.position = b2Vec2((1360/2)/scale, 0);
+    BodyDef.type = b2_staticBody;
+    b2Body* Body = world.CreateBody(&BodyDef);
+    b2PolygonShape Shape;
+    Shape.SetAsBox((1360.0f)/scale, 0);
+    b2FixtureDef FixtureDef;
+    FixtureDef.density = 0.f;
+    FixtureDef.shape = &Shape;
+    Body->CreateFixture(&FixtureDef);
+    }
+    //create obsticles for the 1st level
+    //
+//    {
+//    b2BodyDef BodyDef;
+//    BodyDef.position = b2Vec2((80*12)/scale, (80*3)/scale);
+//    BodyDef.type = b2_staticBody;
+//    b2Body* Body = world.CreateBody(&BodyDef);
+//    b2PolygonShape Shape;
+//    Shape.SetAsBox((80.0f)/scale, (80.0)/scale);
+//    b2FixtureDef FixtureDef;
+//    FixtureDef.density = 0.f;
+//    FixtureDef.shape = &Shape;
+//    Body->CreateFixture(&FixtureDef);
+//    }
+
+    {
+    b2BodyDef BodyDef;
+    BodyDef.position = b2Vec2((80*11)/scale, (80*4)/scale);
+    BodyDef.type = b2_staticBody;
+    b2Body* Body = world.CreateBody(&BodyDef);
+    b2PolygonShape Shape;
+    Shape.SetAsBox((40.0f)/scale, (40.0)/scale);
+    b2FixtureDef FixtureDef;
+    FixtureDef.density = 0.f;
+    FixtureDef.shape = &Shape;
+    Body->CreateFixture(&FixtureDef);
+    }
+
+}
+void removeBodies(b2Body &body){
+    world.DestroyBody(&body);
 }
