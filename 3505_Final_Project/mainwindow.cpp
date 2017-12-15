@@ -365,18 +365,18 @@ void MainWindow::createWalls(b2World &world){
 //    Body->CreateFixture(&FixtureDef);
 //    }
 
-    {
-    b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2((80*11)/scale, (80*4)/scale);
-    BodyDef.type = b2_staticBody;
-    b2Body* Body = world.CreateBody(&BodyDef);
-    b2PolygonShape Shape;
-    Shape.SetAsBox((40.0f)/scale, (80.0)/scale);
-    b2FixtureDef FixtureDef;
-    FixtureDef.density = 0.f;
-    FixtureDef.shape = &Shape;
-    Body->CreateFixture(&FixtureDef);
-    }
+//    {
+//    b2BodyDef BodyDef;
+//    BodyDef.position = b2Vec2((80*11)/scale, (80*4)/scale);
+//    BodyDef.type = b2_staticBody;
+//    b2Body* Body = world.CreateBody(&BodyDef);
+//    b2PolygonShape Shape;
+//    Shape.SetAsBox((40.0f)/scale, (80.0)/scale);
+//    b2FixtureDef FixtureDef;
+//    FixtureDef.density = 0.f;
+//    FixtureDef.shape = &Shape;
+//    Body->CreateFixture(&FixtureDef);
+//    }
 
 }
 void removeBodies(b2Body &body){

@@ -219,7 +219,10 @@ void GameController::answerReceived(int answer)
 
     // convenient debug line to show us the correct answer to the question
     std::cout << goblinVector->at(goblinAsking)->answer << std::endl;
-    // check if the player answered correct, if they did kill the asking goblin
+
+    std::cout << goblinAsking << " Is Asking " << goblinVector->size() << "Is this long" << std::endl;
+
+    // check if the player answered correct, if they did kill the asking goblins
     if (goblinVector->at(goblinAsking)->answer == answer || answer == 420)
     {
         // explode some goblins
@@ -252,6 +255,12 @@ void GameController::answerReceived(int answer)
             emit loadGoblinImages();
             // make sure we are not rendering the slot for the old goblin
             emit killGoblin(goblinVector->size());
+
+            //increment down the current goblin AI index
+            if (curGoblinAIIndex >= goblinVector->size())
+            {
+                curGoblinAIIndex = goblinVector->size()-1;
+            }
         }
     }
     // if they didn't ask correctly, damage the player and end the game if needed
@@ -288,8 +297,10 @@ void GameController::tickGoblinAI()
         return;
     }
 
+    std::cout << curGoblinAIIndex << " Is the current goblin AI index " << goblinVector->size() << " Is the current vector size" << std::endl;
 
-    // generate a vector of Goblin positions for the pathfinder
+
+    // generate a vector of Goblin positions for the pathfinders
     std::vector<std::pair<int, int>> goblinPositions;
     for(int i = 0; i < goblinVector->size(); i++)
     {

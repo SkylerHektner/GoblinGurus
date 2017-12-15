@@ -35,20 +35,22 @@ void effect::addSprite(QVector<sf::Texture> images, QWidget *parent){
 /// \param rotation
 ///
 void effect::moveEffect(int index, float rotation, int x, int y){
-    //qDebug() << rotation;
-    renderTexture[index]->clear(sf::Color::Transparent);
-    sprites[index].canvas->setGeometry(x, y, sprites[index].width * 1.5, sprites[index].height * 1.5);
-    sprites[index].transform.setTexture(sprites[index].texture);
-    sprites[index].transform.setRotation(rotation);
-    renderTexture[index]->draw(sprites[index].transform);
-    renderTexture[index]->display();
+    if(y < 5000){
+        //qDebug() << rotation;
+        renderTexture[index]->clear(sf::Color::Transparent);
+        sprites[index].canvas->setGeometry(x, y, sprites[index].width * 1.5, sprites[index].height * 1.5);
+        sprites[index].transform.setTexture(sprites[index].texture);
+        sprites[index].transform.setRotation(rotation);
+        renderTexture[index]->draw(sprites[index].transform);
+        renderTexture[index]->display();
 
-    sf::Image image = renderTexture[index]->getTexture().copyToImage();
-    QImage sprite(image.getPixelsPtr(), sprites[index].width, sprites[index].height, QImage::Format_ARGB32);
-    sprite = sprite.rgbSwapped();
-    sprite = sprite.scaled(sprites[index].canvas->size(), Qt::IgnoreAspectRatio);
-    sprites[index].canvas->setPixmap(QPixmap::fromImage(sprite));
-    sprites[index].canvas->show();
+        sf::Image image = renderTexture[index]->getTexture().copyToImage();
+        QImage sprite(image.getPixelsPtr(), sprites[index].width, sprites[index].height, QImage::Format_ARGB32);
+        sprite = sprite.rgbSwapped();
+        sprite = sprite.scaled(sprites[index].canvas->size(), Qt::IgnoreAspectRatio);
+        sprites[index].canvas->setPixmap(QPixmap::fromImage(sprite));
+        sprites[index].canvas->show();
+    }
 }
 ///
 /// \brief effect::getImage
