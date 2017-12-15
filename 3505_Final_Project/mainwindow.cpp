@@ -10,8 +10,9 @@
 
 void testPathfind(int, int);
 void removeBodies(QVector<b2Body> &);
+void createWalls();
 QVector<b2Body*> bodiesToDestroy;
-b2Vec2 gravity(0.0f, 2.0f);
+b2Vec2 gravity(0.0f, 2.5f);
 b2World world(gravity);
 // Constructor for main window
 MainWindow::MainWindow(QWidget *parent) :
@@ -21,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Create effects physics
-    scale = 80/1.5;
+    scale = 30;
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateWorld);
     timer->start(33);
@@ -98,7 +99,7 @@ void MainWindow::changePlayerImage(QImage *image, int x, int y)
     ui->PlayerLabel->setPixmap(QPixmap::fromImage(*image));
     ui->PlayerLabel->move(x, y);
     ui->PlayerLabel->show();
-    testPathfind((x-20)/80, (y-20)/80);
+    //testPathfind((x-20)/80, (y-20)/80);
 }
 
 // the slot used to change the image and location of the image of a goblin on the screen
@@ -266,7 +267,6 @@ void MainWindow::on_SubmitAnswerButton_clicked()
     ui->ParchmentLabel->hide();
     ui->ParchmentTextLabel->hide();
     ui->AnswerLineEdit->hide();
-    //michaelBay(800, 400);
     // get the answer out of the Answer Line Edit and send it to the model and clear it
     QString answer = ui->AnswerLineEdit->text();
     emit answerSubmitted(answer.toInt());
@@ -289,25 +289,12 @@ for (b2Body* BodyIterator = world.GetBodyList(); BodyIterator != 0; BodyIterator
                 bodiesToDestroy.append(bodies);
                 //qDebug() << world.GetBodyCount();
             }
+            //qDebug() << bodiesToDestroy.count();
             //For sprite background transform.
             _effect->moveEffect(BodyCount, BodyIterator->GetAngle() * 180/b2_pi, scale * BodyIterator->GetPosition().x, scale * BodyIterator->GetPosition().y);
             ++BodyCount;
         }
     }
-}
-
-void MainWindow::createGround(b2World &world, float posX, float posY)
-{
-    b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(800/scale, 400/scale);
-    BodyDef.type = b2_staticBody;
-    b2Body* Body = world.CreateBody(&BodyDef);
-    b2PolygonShape Shape;
-    Shape.SetAsBox((1000.0f/2)/scale, (40.0f)/scale); // Creates a box shape. Divide your desired width and height by 2.
-    b2FixtureDef FixtureDef;
-    FixtureDef.density = 0.f;  // Sets the density of the body
-    FixtureDef.shape = &Shape; // Sets the shape
-    Body->CreateFixture(&FixtureDef); // Apply the fixture definition
 }
 
 void MainWindow::michaelBay(int x, int y)
@@ -318,31 +305,34 @@ void MainWindow::michaelBay(int x, int y)
 
 void MainWindow::makeExplodingGoblin(int goblinX, int goblinY){
     //add goblin to effect
+    float boxSize = 10.0f; //size of the box depending on the asset loaded
     if(body.loadFromFile("../Assets/BODY.png")){}
     if(hand.loadFromFile("../Assets/HAND.png")){}
     QVector<sf::Texture> imagePTRs;
     for(int i = 0; i < 15; i++){
         if(i < 5){
             imagePTRs.append(body);
+            boxSize = body.getSize().x;
         }
         else{
             imagePTRs.append(hand);
+            boxSize = body.getSize().x;
         }
         //Make bodies
         b2BodyDef BodyDef;
-        BodyDef.position = b2Vec2(goblinY/scale, goblinY/scale); //need to scale the pixel positions to real world positions. World is in meters
+        BodyDef.position = b2Vec2(goblinX/scale, goblinY/scale); //need to scale the pixel positions to real world positions. World is in meters
         BodyDef.type = b2_dynamicBody;
         b2Body* Body = world.CreateBody(&BodyDef);
         if(true) {Body->ApplyLinearImpulse(b2Vec2( qrand()%3,  -qrand()%3), Body->GetWorldCenter(), true);}
         b2PolygonShape Shape;
-        Shape.SetAsBox((44.0f)/scale, (44.0f)/scale);
+        Shape.SetAsBox((boxSize/2)/scale, (boxSize/2)/scale);
         b2FixtureDef FixtureDef;
         FixtureDef.density = 1.f;
         FixtureDef.friction = 0.7f;
         FixtureDef.shape = &Shape;
         Body->CreateFixture(&FixtureDef);
     }
-    _effect->addSprite(imagePTRs, goblinX, goblinY, this);
+    _effect->addSprite(imagePTRs, this);
 }
 
 void removeBodies(QVector<b2Body> &bodies){

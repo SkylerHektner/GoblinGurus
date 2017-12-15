@@ -3,6 +3,9 @@
 #include <QObject>
 #include "goblin.h"
 #include "questionmanager.h"
+#include <QTimer>
+#include "pathfinder.h"
+#include <QMediaPlayer>
 
 /*
  * This class is the primary model object for the game. It ultimately is responsible for interfacing with the view.
@@ -27,16 +30,18 @@ signals:
     void changePlayerImageRequest(QImage * image, int x, int y);
     void showParchment(QString QuestionText, bool takeAnswer, QImage * image);
     void updateHealth(QString health);
+    void michaelBay(int, int);
 
     // in the two below methods, i refers to the index of the goblin we want to act on
     void changeGoblinImageRequest(QImage * image, int x, int y, int i);
     void killGoblin(int i);
-    // call michaelBay to explode some goblins.
-    void michaelBay(int, int);
 
 public slots:
     void moveRequested(std::string movement);
     void answerReceived(int answer);
+
+    // used by an internal QTimer to tick the goblin AI
+    void tickGoblinAI();
 
 private:
 
@@ -80,6 +85,22 @@ private:
 
     // the question manager
     QuestionManager * questionManager = new QuestionManager();
+
+    // the QTimer responsible for ticking the goblin AI
+    QTimer * goblinTimer = new QTimer(this);
+    // The int reponsible for tracking current goblin inbetween AI ticks
+    int curGoblinAIIndex = 0;
+    // the bool that tells the goblin tick whether or not to pathfind
+    bool moveGoblins = false;
+    // the pathfinder that is used to move the goblins
+    Pathfinder *goblinAI;
+
+    // vairables to keep track of turns
+    int playerMoveCounter = 0;
+    int goblinMoveCounter = 0;
+
+    // the media player we use to play game music
+    QMediaPlayer * musicPlayer;
 
     // the method called to emit a signal for the view to move the player
     void movePlayer(std::string movement);

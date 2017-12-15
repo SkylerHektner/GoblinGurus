@@ -7,6 +7,8 @@
 #include "questionmanager.h"
 #include "question.h"
 #include <QString>
+#include <QMediaPlayer>
+#include <QDebug>
 
 // destructor for the Game Controller Class
 GameController::~GameController()
@@ -37,6 +39,17 @@ GameController::GameController(QObject * parent) : QObject(parent)
     // define player starting location (level 1)
     PlayerPosX = 14;
     PlayerPosY = 4;
+
+    // connect the goblin AI tick timer
+    connect(goblinTimer, SIGNAL(timeout()), this, SLOT(tickGoblinAI()));
+    goblinTimer->start(250);
+    goblinAI = new Pathfinder(*collisionPoints, 10, 16);
+
+    // play a nice jig
+    musicPlayer = new QMediaPlayer;
+    musicPlayer->setMedia(QUrl::fromLocalFile("../Assets/BeepBox-Song.wav"));
+    musicPlayer->setVolume(50);
+    musicPlayer->play();
 }
 
 void GameController::startGame()
@@ -120,6 +133,16 @@ void GameController::moveRequested(std::string movement)
             PlayerPosX++;
             lastMoveDirection = 'r';
         }
+        playerMoveCounter++;
+        if (playerMoveCounter == 6)
+        {
+            moveAllowed = false;
+            moveGoblins = true;
+            oldPosX = PlayerPosX;
+            oldPosY = PlayerPosY;
+            playerMoveCounter = 0;
+        }
+
     }
 
     // check for collision and revert movement if necessary
@@ -132,13 +155,34 @@ void GameController::moveRequested(std::string movement)
         }
     }
 
-    // check for collision with goblins
+    // check for collision with goblins, if collided disable movement for goblins and player b/c parchment is up
     for (int i = 0; i < goblinVector->size();i++)
     {
         if (goblinVector->at(i)->posX == PlayerPosX && goblinVector->at(i)->posY == PlayerPosY)
         {
             moveAllowed = false;
-            emit showParchment(goblinVector->at(i)->question, true, parchmentImage);
+            moveGoblins = false;
+            switch(goblinVector->at(i)->attempts)
+                        {
+                        case 0:
+                            emit showParchment((goblinVector->at(i)->question), true, parchmentImage);
+                            break;
+                        case 1:
+                            emit showParchment((goblinVector->at(i)->question + "\n\nHINT: " + goblinVector->at(i)->hint1), true, parchmentImage);
+                            break;
+                        case 2:
+                        case 3:
+                            emit showParchment((goblinVector->at(i)->question + "\n\nHINT: "
+                                                + goblinVector->at(i)->hint1 + "\n\n"
+                                                + goblinVector->at(i)->hint2), true, parchmentImage);
+                            break;
+                        default:
+                            emit showParchment((goblinVector->at(i)->question + "\n\nHINT: "
+                                                + goblinVector->at(i)->hint1 + "\n\n"
+                                                + goblinVector->at(i)->hint2 + "\n\n"
+                                                + goblinVector->at(i)->hint3), true, parchmentImage);
+                            break;
+                        }
         }
     }
 
@@ -149,73 +193,146 @@ void GameController::moveRequested(std::string movement)
 // the slot used to catch an answer submitted in the view
 void GameController::answerReceived(int answer)
 {
-    // allow the player to move again
-    moveAllowed = true;
+    // re enable movement based on whos turn it is (goblins or players)
+    if (curGoblinAIIndex != 0)
+    {
+        moveGoblins = true;
+        moveAllowed = false;
+    }
+    else
+    {
+        moveGoblins = false;
+        moveAllowed = true;
+    }
 
-    // find the goblin currently colliding with the player and kill them if the player answered correctly
+    // find the goblin currently asking the player
+    int goblinAsking = (curGoblinAIIndex-1 + goblinVector->size()) % goblinVector->size();
+    // first, check for a goblin colliding with the player
     for (int i = 0; i < goblinVector->size();i++)
     {
         if (goblinVector->at(i)->posX == PlayerPosX && goblinVector->at(i)->posY == PlayerPosY)
         {
-            // convenient debug line to show us the correct answer to the question
-            std::cout << goblinVector->at(i)->answer << std::endl;
-            std::cout << goblinVector->size() << std::endl;
-            if (goblinVector->at(i)->answer == answer)
-            {
-                // explode some goblins
-                emit michaelBay(goblinVector->at(i)->posX, goblinVector->at(i)->posY);
-                // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
-                delete goblinVector->at(i);
-                if(goblinVector->size() == 1)
-                {
-                    generateNextLevel();
-                }
-                else
-                {
-                    // create a new vector to store the goblins. We have to do this to reset vector.size
-                    std::vector<goblin*> * newVector = new std::vector<goblin*>();
-
-                    // store all old goblins in the new vector except the one we are killing
-                    for(int v = 0; v < goblinVector->size(); v++)
-                    {
-                        if (v != i)
-                        {
-                            newVector->push_back(goblinVector->at(v));
-                        }
-                    }
-
-                    // delete the old goblin vector and assign goblinVector to the new vector
-                    delete goblinVector;
-                    goblinVector = newVector;
-
-                    // tell the screen to update
-                    emit loadGoblinImages();
-                    // make sure we are not rendering the slot for the old goblin
-                    emit killGoblin(goblinVector->size());
-                }
-            }
-
-            else
-            {
-                // player takes damage
-                playerHealth -= goblinAttackDamage;
-                QString health(std::to_string(playerHealth).data());
-                emit updateHealth(health);
-
-                // player returns to pos before attack
-                PlayerPosX = oldPosX;
-                PlayerPosY = oldPosY;
-                emit loadPlayerImage();
-
-                // for now, application simply terminates on loss
-                if (playerHealth <= 0)
-                {
-                    exit(EXIT_SUCCESS);
-                }
-            }
-
-
+            goblinAsking = i;
+            break;
         }
+    }
+
+    // convenient debug line to show us the correct answer to the question
+    std::cout << goblinVector->at(goblinAsking)->answer << std::endl;
+    // check if the player answered correct, if they did kill the asking goblin
+    if (goblinVector->at(goblinAsking)->answer == answer || answer == 420)
+    {
+        qDebug() << ((goblinVector->at(goblinAsking)->posX + 1) * 80) - 40 << " " << ((goblinVector->at(goblinAsking)->posY + 1) * 80) - 40;
+        // explode some goblins
+        emit michaelBay(((goblinVector->at(goblinAsking)->posX + 1) * 80) - 40, ((goblinVector->at(goblinAsking)->posY + 1) * 80) - 40);
+        // remove the goblin from the vector, delete it, and shift back all remaining elements in the vector
+        delete goblinVector->at(goblinAsking);
+        if(goblinVector->size() == 1)
+        {
+            generateNextLevel();
+        }
+        else
+        {
+            // create a new vector to store the goblins. We have to do this to reset vector.size
+            std::vector<goblin*> * newVector = new std::vector<goblin*>();
+
+            // store all old goblins in the new vector except the one we are killing
+            for(int v = 0; v < goblinVector->size(); v++)
+            {
+                if (v != goblinAsking)
+                {
+                    newVector->push_back(goblinVector->at(v));
+                }
+            }
+
+            // delete the old goblin vector and assign goblinVector to the new vector
+            delete goblinVector;
+            goblinVector = newVector;
+
+            // tell the screen to update
+            emit loadGoblinImages();
+            // make sure we are not rendering the slot for the old goblin
+            emit killGoblin(goblinVector->size());
+        }
+    }
+    // if they didn't ask correctly, damage the player and end the game if needed
+    else
+    {
+        // player takes damage
+        playerHealth -= goblinAttackDamage;
+        goblinVector->at(goblinAsking)->attempts += 1;
+        QString health(std::to_string(playerHealth).data());
+        emit updateHealth(health);
+
+        // player returns to pos before attack
+        PlayerPosX = oldPosX;
+        PlayerPosY = oldPosY;
+        emit loadPlayerImage();
+
+        // for now (read: forever), application simply terminates on loss
+        if (playerHealth <= 0)
+        {
+            exit(EXIT_SUCCESS);
+        }
+    }
+}
+
+// this method is called regurlary by the goblinTimer (QTimer) inside GameController
+// it's used to tick the goblin AI slowly rather than all at once
+void GameController::tickGoblinAI()
+{
+    //std::cout << "ticking goblin AI" << std::endl;
+
+    // if for any reason we don't want to be moving goblins, return immediately
+    if (!moveGoblins)
+    {
+        return;
+    }
+
+
+    // generate a vector of Goblin positions for the pathfinder
+    std::vector<std::pair<int, int>> goblinPositions;
+    for(int i = 0; i < goblinVector->size(); i++)
+    {
+        goblinPositions.push_back(std::pair<int, int>(goblinVector->at(i)->posX, goblinVector->at(i)->posY));
+    }
+
+    // query the pathfinder for the movement for the Goblin based on its type
+    std::vector<std::pair<int, int>> AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, 0, 1, std::pair<int, int>(PlayerPosX, PlayerPosY));
+    if (goblinVector->at(curGoblinAIIndex)->type == "Mage")
+        AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, -0.5, -0.5, std::pair<int, int>(PlayerPosX, PlayerPosY));
+    else if (goblinVector->at(curGoblinAIIndex)->type == "Archer")
+            AIResults = goblinAI->findPath(goblinPositions, curGoblinAIIndex, 2, 0.8, -0.2, std::pair<int, int>(PlayerPosX, PlayerPosY));
+    if (AIResults.size() > 0) {
+        goblinVector->at(curGoblinAIIndex)->posX = AIResults[0].first;
+        goblinVector->at(curGoblinAIIndex)->posY = AIResults[0].second;
+    }
+    loadGoblinImages();
+    // check if that goblin is attacking the player, if they are bring up a question prompt
+    if (goblinAI->shouldAttack(std::pair<int, int>(goblinVector->at(curGoblinAIIndex)->posX, goblinVector->at(curGoblinAIIndex)->posY),
+                               std::pair<int, int>(PlayerPosX, PlayerPosY),
+                               goblinVector->at(curGoblinAIIndex)->type) && goblinMoveCounter == 1)
+    {
+        emit showParchment("You were attacked by a " + goblinVector->at(curGoblinAIIndex)->type + "\n\n" +
+                           goblinVector->at(curGoblinAIIndex)->question, true, parchmentImage);
+        moveAllowed = false;
+        moveGoblins = false;
+    }
+
+
+    // incremement the goblin AI index and reset to 0 if all goblins have moved
+    goblinMoveCounter++;
+    if (goblinMoveCounter == 2)
+    {
+        curGoblinAIIndex++;
+        goblinMoveCounter = 0;
+    }
+
+    if (curGoblinAIIndex == goblinVector->size())
+    {
+        curGoblinAIIndex = 0;
+        moveGoblins = false;
+        moveAllowed = true;
     }
 }
 
@@ -362,28 +479,28 @@ void GameController::generateGoblins()
     if (level == 1)
     {
         Question q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(2, 2, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 2, q, "Warrior"));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(5, 2, q.text, q.answer));
+        goblinVector->push_back(new goblin(5, 2, q, "Warrior"));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 7, q, "Archer"));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(5, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(5, 7, q, "Archer"));
         q = questionManager->GetQuestion(diff - 1);
-        goblinVector->push_back(new goblin(9, 2, q.text, q.answer));
+        goblinVector->push_back(new goblin(9, 2, q, "Warrior"));
     }
     else if (level == 2)
     {
         Question q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(13, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(13, 7, q, "Warrior"));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(7, 8, q.text, q.answer));
+        goblinVector->push_back(new goblin(7, 8, q, "Archer"));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(7, 5, q.text, q.answer));
+        goblinVector->push_back(new goblin(7, 5, q, "Archer"));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 5, q, "Mage"));
         q = questionManager->GetQuestion(diff);
-        goblinVector->push_back(new goblin(4, 3, q.text, q.answer));
+        goblinVector->push_back(new goblin(4, 3, q, "Warrior"));
         /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(8, 2, q.text, q.answer));
         q = questionManager->GetQuestion(0);
@@ -393,15 +510,15 @@ void GameController::generateGoblins()
     else if(level == 3)
     {
         Question q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(12, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(12, 7, q, "Mage"));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(14, 1, q.text, q.answer));
+        goblinVector->push_back(new goblin(14, 1, q, "Mage"));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(6, 5, q.text, q.answer));
+        goblinVector->push_back(new goblin(6, 5, q, "Archer"));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(2, 5, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 5, q, "Warrior"));
         q = questionManager->GetQuestion(diff + 1);
-        goblinVector->push_back(new goblin(2, 7, q.text, q.answer));
+        goblinVector->push_back(new goblin(2, 7, q, "Warrior"));
         /*q = questionManager->GetQuestion(0);
         goblinVector->push_back(new goblin(5, 1, q.text, q.answer));
         q = questionManager->GetQuestion(0);
@@ -452,4 +569,11 @@ void GameController::generateNextLevel()
     }
     loadPlayerImage();
     loadGoblinImages();
+
+    goblinAI = new Pathfinder(*collisionPoints, 10, 16);
+
+    moveAllowed = true;
+    moveGoblins = false;
+    playerMoveCounter = 0;
+    goblinMoveCounter = 0;
 }

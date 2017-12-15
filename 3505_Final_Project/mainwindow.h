@@ -56,8 +56,6 @@ private:
     //Physics stuff
     //create dynamic bodies
     void createBox(b2World &world, float posX, float posY);
-    //some ground
-    void createGround(b2World &world, float posX, float posY);
     //help michaelBay make some explosions
     void makeExplodingGoblin(int, int);
     float scale;
